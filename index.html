@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VE3A Telemarketing Practice</title>
+    <!-- Import Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5; --primary-hover: #4338ca; --accent: #f59e0b;
+            --bg-grad-1: #4f46e5; --bg-grad-2: #06b6d4; --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3); --text-dark: #1f2937; --card-bg: #ffffff;
+            --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
+            --font-title: 'Quicksand', 'Century Gothic', sans-serif;
+            --font-paper-title: 'Fredoka', cursive;
+        }
+        body { font-family: var(--font-body); margin: 0; padding: 0; line-height: 1.6; min-height: 100vh; background-color: #f3f4f6; color: var(--text-dark); transition: background 0.5s ease; overflow-x: hidden; width: 100vw; }
+        body.landing-active { background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), #3b82f6); background-size: 400% 400%; animation: gradientBG 10s ease infinite; display: flex; align-items: center; justify-content: center; }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .container { padding: 1rem; max-width: 850px; margin: 0 auto; display: none; width: 100%; box-sizing: border-box; }
+        body:not(.landing-active) .container { display: block; }
+        header { background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2)); color: white; padding: 1rem; text-align: center; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; display: none; width: 100%; box-sizing: border-box; }
+        body:not(.landing-active) header { display: block; }
+        header h1 { margin: 0; font-size: 1.4rem; font-family: var(--font-body); font-weight: 700; }
+        header p { margin: 0.2rem 0 0; opacity: 0.9; font-size: 0.9rem; }
+        .page { display: none; animation: fadeIn 0.4s ease-out; width: 100%; box-sizing: border-box; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Landing Page --- */
+        #page-landing { text-align: center; padding: 20px; width: 100%; max-width: 800px; margin: 0 auto; font-family: var(--font-title); }
+        .glass-panel { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px 20px; margin-bottom: 30px; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2); color: white; transition: transform 0.3s ease, box-shadow 0.3s ease; max-width: 90%; margin-left: auto; margin-right: auto; }
+        @media (min-width: 768px) { .glass-panel:hover { transform: translateY(-5px); box-shadow: 0 15px 40px 0 rgba(0,0,0,0.3); } }
+        .glass-panel h3 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 3px; margin: 0 0 8px 0; font-weight: 700; }
+        .glass-panel h4 { font-size: 1rem; margin: 0 0 25px 0; border-bottom: 2px solid rgba(255,255,255,0.6); display: inline-block; padding-bottom: 5px; font-weight: 700; }
+        .emoji-float { display: inline-block; transition: transform 0.2s ease; cursor: pointer; }
+        .emoji-float:hover { transform: scale(1.4) rotate(10deg); }
+        .main-title { font-size: 2.3rem; font-family: var(--font-title); font-weight: 700; text-shadow: 2px 3px 5px rgba(0,0,0,0.2); margin: 25px 0; position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; line-height: 1.2; white-space: nowrap; }
+        .sparkle { color: #ffd700; position: absolute; animation: twinkle 1.5s infinite alternate; font-style: normal; pointer-events: none; }
+        .s1 { top: -15px; left: -32px; font-size: 1.4rem; } .s2 { bottom: -10px; left: -18px; animation-delay: 0.5s; font-size: 0.9rem; }
+        .s3 { top: -10px; right: -32px; animation-delay: 0.2s; font-size: 1.4rem; } .s4 { bottom: -5px; right: -18px; animation-delay: 0.7s; font-size: 1.1rem; }
+        .subtitle-text { font-size: 1.1rem; margin-top: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); font-weight: 700; }
+        .btn-landing { font-family: var(--font-title); background: white; color: var(--primary); border: none; padding: 16px 40px; border-radius: 50px; font-size: 1.3rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: inline-flex; align-items: center; justify-content: center; gap: 12px; width: 100%; max-width: 350px; transition: all 0.3s ease; -webkit-tap-highlight-color: transparent; }
+        .btn-landing:active { transform: scale(0.96); }
+        @media (min-width: 768px) { .glass-panel { padding: 60px 40px; max-width: 100%; } .main-title { font-size: 3.5rem; margin: 30px 0; gap: 16px; } .s1 { left: -50px; top: -20px; font-size: 2rem; } .s3 { right: -50px; top: -15px; font-size: 2rem; } .s2 { left: -30px; bottom: -10px; font-size: 1.2rem; } .s4 { right: -30px; bottom: -5px; font-size: 1.4rem; } .btn-landing { width: auto; font-size: 1.4rem; padding: 18px 50px; } }
+        @media (max-width: 380px) { .main-title { font-size: 1.8rem; gap: 8px; } }
+
+        /* --- Menu Page --- */
+        .menu-layout { display: flex; gap: 20px; margin-top: 15px; }
+        .menu-column { flex: 1; }
+        @media (max-width: 767px) { .menu-layout { flex-direction: column; } }
+        .locked-card { background: #f9fafb; border: 2px dashed #9ca3af; border-radius: 12px; padding: 40px 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; }
+        .locked-card:hover { border-color: var(--accent); background: #fef3c7; transform: translateY(-2px); }
+        .option-list { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+        .option-card { background: var(--card-bg); border-radius: 12px; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 2px solid transparent; cursor: pointer; transition: all 0.2s; }
+        .option-card:active { transform: scale(0.98); border-color: var(--primary); }
+        .option-icon { font-size: 1.5rem; margin-right: 12px; background: #e0e7ff; color: var(--primary); font-weight: 900; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10px; flex-shrink: 0; font-family: var(--font-title); }
+        .option-text h3 { margin: 0 0 3px 0; color: var(--primary); font-size: 1.1rem; font-family: var(--font-title); font-weight: 700; }
+        .option-text p { margin: 0; color: #6b7280; font-size: 0.9rem; font-weight: 600; }
+
+        /* --- Paper Layout --- */
+        .paper-layout { margin-top: 15px; position: relative; }
+        .box { background: var(--card-bg); border: 2px solid #e5e7eb; border-radius: 10px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); font-size: 0.95rem; }
+        .box-left { border-color: #94a3b8; }
+        .target-offer-box { border: 2px dashed #9ca3af; padding: 10px; text-align: center; border-radius: 8px; margin: 15px 0; background: #f9fafb; position: relative; }
+        .mobile-hint-btn { font-family: var(--font-body); display: inline-flex; align-items: center; justify-content: center; background: #fef3c7; color: #d97706; border: 1px solid #fde68a; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; margin-left: 10px; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05); vertical-align: middle; -webkit-tap-highlight-color: transparent; }
+        .mobile-hint-btn:active { background: #fde68a; transform: scale(0.95); }
+        @media (min-width: 768px) { .paper-layout { display: flex; gap: 30px; align-items: stretch; } .paper-left { flex: 1.2; } .desktop-hints-container { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; } .mobile-hint-btn { display: none; } .box { padding: 20px; font-size: 1rem; } .box-right { border-color: var(--accent); position: relative; } .svg-arrow { display: block; position: absolute; left: -45px; width: 45px; height: 20px; z-index: 10; } }
+        @media (max-width: 767px) { .desktop-hints-container { display: none; } .svg-arrow { display: none; } }
+        .box-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 10px; border-bottom: 2px solid #f3f4f6; padding-bottom: 5px; display: flex; align-items: center; gap: 5px; color: var(--text-dark); }
+
+        /* --- Modals --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; opacity: 0; transition: opacity 0.3s; align-items: flex-end; }
+        .modal.show { display: flex; opacity: 1; }
+        .modal-content { background: white; width: 100%; border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 25px 20px; box-sizing: border-box; transform: translateY(100%); transition: transform 0.3s ease-out; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); border-top: 5px solid var(--accent); }
+        .modal.show .modal-content { transform: translateY(0); }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; font-weight: bold; color: #9ca3af; cursor: pointer; background: none; border: none; padding: 5px; }
+
+        /* --- Common UI --- */
+        .settings-panel { background: white; border-radius: 10px; padding: 12px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; border-left: 4px solid var(--primary); }
+        .setting-group { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; font-weight: 600; }
+        select { font-family: var(--font-body); padding: 6px 10px; border-radius: 6px; border: 1px solid #d1d5db; background: #f9fafb; font-size: 0.9rem; font-weight: 700; min-height: 36px; cursor: pointer; }
+        .meaning-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.2s; z-index: 1000; pointer-events: none; letter-spacing: 0.5px; font-weight: 700; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4); margin-bottom: 8px; }
+        .meaning-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--accent) transparent transparent transparent; }
+        .clickable-word.show-tooltip .meaning-tooltip { opacity: 1; visibility: visible; }
+        .clickable-word { cursor: pointer; padding: 4px 2px; margin: 0 1px; border-radius: 4px; display: inline-block; transition: background-color 0.2s, color 0.2s; position: relative; -webkit-tap-highlight-color: transparent; }
+        .clickable-word:active { background-color: var(--primary); color: white; }
+        .syllable-tooltip { font-family: var(--font-body); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 6px 10px; border-radius: 6px; font-size: 0.9rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.2s; z-index: 1000; pointer-events: none; letter-spacing: 1px; font-weight: 700; }
+        .syllable-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #1f2937 transparent transparent transparent; }
+        .clickable-word.show-tooltip .syllable-tooltip { opacity: 1; visibility: visible; }
+
+        /* --- Recoder UI --- */
+        .recorder-container { background: #fef2f2; border-radius: 12px; padding: 15px; margin: 20px 0; box-shadow: 0 4px 6px -1px rgba(239,68,68,0.1); border: 2px dashed #fca5a5; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .timer-display { font-size: 1.5rem; font-family: monospace; font-weight: bold; color: var(--text-dark); background: #fff; padding: 3px 15px; border-radius: 8px; border: 1px solid #fca5a5; }
+        .timer-display.recording { color: #ef4444; background: #fee2e2; border-color: #ef4444; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        .controls-row { display: flex; gap: 15px; width: 100%; justify-content: center; }
+        .rec-btn { font-family: var(--font-body); border: none; border-radius: 50px; padding: 10px 20px; font-size: 0.95rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .btn-start-rec { background: #ef4444; color: white; } .btn-start-rec:active { transform: scale(0.95); background: #dc2626; }
+        .btn-stop-rec { background: #4b5563; color: white; display: none; } .btn-stop-rec:active { transform: scale(0.95); }
+        .btn-container { display: flex; justify-content: space-between; margin: 15px 0; gap: 10px; }
+        .btn { font-family: var(--font-body); flex: 1; background: var(--primary); color: white; border: none; padding: 12px 10px; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3); min-height: 44px; display: flex; align-items: center; justify-content: center; }
+        .btn:active { background-color: var(--primary-hover); box-shadow: none; transform: translateY(1px); }
+        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); box-shadow: none; }
+        .exp-card { background: white; border-radius: 10px; padding: 12px; margin-bottom: 12px; border-left: 4px solid var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .play-row { display: flex; align-items: flex-start; gap: 12px; }
+        .play-btn { font-family: var(--font-body); background: var(--primary); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.2); margin-top: 2px; }
+        .play-btn:active { transform: scale(0.9); }
+        .text-content { font-size: 0.95rem; line-height: 1.5; width: calc(100% - 48px); word-wrap: break-word; }
+        .hint { background: #fffbeb; border-left: 4px solid var(--accent); padding: 10px; border-radius: 4px; font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: flex-start; font-weight: 600; }
+        b, strong { font-weight: 700; }
+    </style>
+</head>
+<body class="landing-active" id="main-body">
+
+    <header>
+        <h1>VE3A Telemarketing</h1>
+        <p>Interactive Practices</p>
+    </header>
+
+    <!-- PAGE 1: LANDING -->
+    <div id="page-landing" class="page active">
+        <div class="glass-panel">
+            <h3>Vocational English 3A</h3>
+            <h4>Language Centre</h4>
+            <div class="main-title">
+                <span class="sparkle s1">✨</span><span class="sparkle s2">✨</span>
+                <span class="emoji-float">📞</span> <span>Telemarketing Pro</span> <span class="emoji-float">🚀</span>
+                <span class="sparkle s3">✨</span><span class="sparkle s4">✨</span>
+            </div>
+            <p class="subtitle-text">Ready to master your speaking skills? <span class="emoji-float">🎯</span></p>
+            <div>
+                <button class="btn-landing" onclick="navToMenu()">Let's get started! <span class="emoji-float" style="margin-left:5px;">🎧</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- INTERNAL CONTAINER -->
+    <div class="container">
+
+        <!-- PAGE 1.5: MENU -->
+        <div id="page-menu" class="page">
+            <h2 style="font-size: 1.4rem; margin-top: 0; font-weight: 700; font-family: var(--font-title);">Select a Practice</h2>
+            <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 15px; font-weight: 600;">Choose a paper below to begin.</p>
+            
+<div class="menu-layout">
+    <!-- 左邊：Official Papers -->
+    <div class="menu-column">
+        <h3 style="color: var(--primary); font-family: var(--font-title); text-align: center; margin-bottom: 15px; font-size: 1.2rem;">Official Papers</h3>
+        <div class="option-list">
+            <div class="option-card" onclick="loadPractice('p1')">
+                <div class="option-icon">1</div>
+                <div class="option-text"><h3>Practice 1</h3><p>Apple Tree Learning Centre</p></div>
+            </div>
+            <div class="option-card" onclick="loadPractice('p2')">
+                <div class="option-icon">2</div>
+                <div class="option-text"><h3>Practice 2</h3><p>United Charity</p></div>
+            </div>
+            <div class="option-card" onclick="loadPractice('p3')">
+                <div class="option-icon">3</div>
+                <div class="option-text"><h3>Practice 3</h3><p>Graceful Heart</p></div>
+            </div>
+            <div class="option-card" onclick="loadPractice('p4')">
+                <div class="option-icon">4</div>
+                <div class="option-text"><h3>Practice 4</h3><p>Miles Community Centre</p></div>
+            </div>
+        </div>
+    </div>
+    <!-- 右邊：Supplementary Practices -->
+    <div class="menu-column">
+        <h3 style="color: var(--accent); font-family: var(--font-title); text-align: center; margin-bottom: 15px; font-size: 1.2rem;">Supplementary</h3>
+        
+        <!-- 未解鎖畫面 -->
+        <div id="supp-locked" class="locked-card" onclick="openPasswordModal()">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">🔒</div>
+            <h3 style="margin: 0; color: var(--text-dark); font-family: var(--font-title);">Locked Content</h3>
+            <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 0.9rem; font-weight: 600;">Click to enter password</p>
+        </div>
+
+        <!-- 解鎖後顯示的列表 -->
+        <div id="supp-unlocked" class="option-list" style="display: none; flex-direction: column; gap: 12px;">
+            <div class="option-card" onclick="loadPractice('suppA')">
+                <div class="option-icon" style="background: #fef3c7; color: var(--accent);">A</div>
+                <div class="option-text"><h3 style="color: var(--accent);">Practice A</h3><p>Vocational College</p></div>
+            </div>
+            <div class="option-card" onclick="loadPractice('suppB')">
+                <div class="option-icon" style="background: #fef3c7; color: var(--accent);">B</div>
+                <div class="option-text"><h3 style="color: var(--accent);">Practice B</h3><p>Tsuen Wan District Office</p></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="margin-top: 25px; text-align: center;">
+
+                <button class="btn btn-outline" style="width: auto; padding: 10px 20px; display: inline-flex;" onclick="navToLanding()">⬅ Back to Cover</button>
+            </div>
+        </div>
+
+        <!-- PAGE 2: PRACTICE PAPER -->
+        <div id="page-practice" class="page">
+            <div class="btn-container">
+                <button class="btn btn-outline" onclick="navTo('page-menu')">⬅ Menu</button>
+                <button class="btn" onclick="navTo('page-sample')">Sample ➡</button>
+            </div>
+            
+            <div class="settings-panel">
+                <div class="setting-group">
+                    <label>Accent:</label>
+                    <select id="accent-select" onchange="updateVoice();">
+                        <option value="UK">British (UK)</option>
+                        <option value="US">American (US)</option>
+                    </select>
+                </div>
+                <div class="setting-group" style="margin-left: 10px;">
+                    <label>Speed:</label>
+                    <select id="speed-select">
+                        <option value="0.75">Slow</option>
+                        <option value="0.9" selected>Normal</option>
+                        <option value="1.1">Fast</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="hint"><span style="margin-right: 8px;">💡</span> Tap any word or number to hear it!</div>
+
+            <div class="paper-layout">
+                <div class="paper-left" id="paper-left-container"></div>
+                <div class="desktop-hints-container" id="desktop-hints-container"></div>
+            </div>
+
+            <div class="btn-container" style="margin-top: 25px;">
+                <button class="btn" style="background-color: var(--accent); color: #fff;" onclick="navTo('page-expressions')">Useful Expressions ➡</button>
+            </div>
+        </div>
+
+        <!-- PAGE 3: SAMPLE & RECORDER -->
+        <div id="page-sample" class="page">
+            <div class="btn-container">
+                <button class="btn btn-outline" onclick="navTo('page-practice')">⬅ Paper</button>
+                <button class="btn" style="background-color: var(--accent); color: #fff;" onclick="navTo('page-expressions')">Expressions ➡</button>
+            </div>
+
+            <div class="settings-panel">
+                <div class="setting-group"><label>Accent:</label><select id="accent-select-2" onchange="syncAccents(this.value)"><option value="UK">British (UK)</option><option value="US">American (US)</option></select></div>
+            </div>
+
+            <!-- RECORDING UI -->
+            <div class="recorder-container">
+                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record here!</div>
+                <div style="font-size: 0.85rem; color: #6b7280; text-align: center; font-weight: 600;">Look at the sample below and time yourself (Target: 1.5 - 2 mins)</div>
+                <div class="timer-display" id="timer">00:00</div>
+                <div class="controls-row">
+                    <button class="rec-btn btn-start-rec" id="btn-start" onclick="startRecording()">
+                        <span style="background: white; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span> Start
+                    </button>
+                    <button class="rec-btn btn-stop-rec" id="btn-stop" onclick="stopRecording()">
+                        <span style="background: white; width: 12px; height: 12px; display: inline-block;"></span> Stop
+                    </button>
+                </div>
+                <audio id="audio-preview" controls style="display: none; width: 100%; margin-top: 5px;"></audio>
+                
+                <div id="post-record-actions" style="display: none; flex-direction: column; width: 100%; align-items: center; gap: 10px; margin-top: 5px;">
+                    <button class="rec-btn" id="btn-share" onclick="shareAudio()" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3); display: none;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="16.51" x2="8.59" y2="10.49"></line></svg> Send via WhatsApp
+                    </button>
+                    <a id="btn-download" class="rec-btn" target="_blank" style="background: #f59e0b; color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3); display: none;">📥 Download & Send</a>
+                    <p id="share-status" style="font-size: 0.85rem; color: #6b7280; display: none; text-align: center; margin: 0; padding: 0 10px; line-height: 1.3; font-weight: 600;"></p>
+                </div>
+            </div>
+
+            <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700; font-family: var(--font-title);">Sample</h2>
+            <div class="hint"><span style="margin-right: 8px;">💡</span> Tap ▶ to play the whole sentence, or tap words for syllables!</div>
+            <div class="box" id="sample-container" style="display: flex; flex-direction: column; gap: 12px; padding: 12px;"></div>
+        </div>
+
+        <!-- PAGE 4: USEFUL EXPRESSIONS -->
+        <div id="page-expressions" class="page">
+            <div class="btn-container">
+                <button class="btn btn-outline" onclick="navTo('page-practice')">⬅ Paper</button>
+                <button class="btn btn-outline" onclick="navTo('page-sample')">⬅ Sample</button>
+                <button class="btn" onclick="navTo('page-menu')">🏠 Menu</button>
+            </div>
+
+            <h2 style="font-size: 1.4rem; margin-top: 0; font-weight: 700; font-family: var(--font-title);">Useful Expressions</h2>
+            <p style="font-size: 0.9rem; color: #6b7280; font-weight: 600;">Use these templates for your speaking assessment. The <span style="color:#f59e0b; font-weight:700;">orange</span> parts can be changed!</p>
+            
+            <div id="expressions-container"></div>
+        </div>
+    </div>
+
+    <!-- MODALS (Mobile Only) -->
+    <div id="modal-why" class="modal" onclick="closeModalOnBG(event, 'modal-why')">
+        <div class="modal-content" id="modal-content-why">
+            <button class="modal-close" onclick="closeModal('modal-why')">&times;</button>
+            <div class="box-title" style="font-size: 1.2rem; border-color: var(--accent); color: var(--accent);">🤔 Why joining?</div>
+            <ul id="modal-content-why-list" style="padding-left: 20px; font-size: 1.05rem; margin-top: 15px;"></ul>
+        </div>
+    </div>
+    <div id="modal-offers" class="modal" onclick="closeModalOnBG(event, 'modal-offers')">
+        <div class="modal-content" id="modal-content-offers">
+            <button class="modal-close" onclick="closeModal('modal-offers')">&times;</button>
+            <div class="box-title" style="font-size: 1.2rem; border-color: var(--accent); color: var(--accent);">🎁 Offers to participants</div>
+            <ul id="modal-content-offers-list" style="padding-left: 20px; font-size: 1.05rem; margin-top: 15px;"></ul>
+        </div>
+    </div>
+
+    <!-- 密碼輸入 Modal -->
+    <div id="modal-password" class="modal" onclick="closeModalOnBG(event, 'modal-password')">
+        <div class="modal-content" id="modal-content-password">
+            <button class="modal-close" onclick="closeModal('modal-password')">&times;</button>
+            <div class="box-title" style="font-size: 1.2rem; border-color: var(--accent); color: var(--accent);">
+                🔒 Enter Password
+            </div>
+            <div style="margin-top: 20px; text-align: center; padding-bottom: 10px;">
+                <input type="password" id="supp-password-input" style="padding: 12px; width: 80%; max-width: 250px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1.2rem; text-align: center; font-family: var(--font-body); outline: none;" placeholder="Password">
+                <br>
+                <button class="btn" style="margin-top: 15px; background-color: var(--accent); width: 80%; max-width: 250px; color: white;" onclick="verifyPassword()">Unlock</button>
+                <p id="password-error" style="color: #ef4444; font-size: 0.95rem; display: none; margin-top: 12px; font-weight: 700;">Incorrect password. Please try again.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    /* --- Password Logic --- */
+    function openPasswordModal() {
+        document.getElementById("supp-password-input").value = "";
+        document.getElementById("password-error").style.display = "none";
+        openModal("modal-password");
+    }
+    function verifyPassword() {
+        if (document.getElementById("supp-password-input").value === "8632") {
+            closeModal("modal-password");
+            document.getElementById("supp-locked").style.display = "none";
+            document.getElementById("supp-unlocked").style.display = "flex";
+        } else {
+            document.getElementById("password-error").style.display = "block";
+        }
+    }
+
+/* --- Navigation & Dynamic Loading --- */
+        const pData = {
+            p1: {
+                title: "Apple Tree Learning Centre<br>English Fun Day",
+                enrollTitle: "Enrolment Method & Fee:",
+                details: [
+                    "For children aged 7 - 12",
+                    "<b>Date / Time / Venue:</b><br>the 8th of Jul / 9 am - 4 pm / Multi-purpose room, Apple Tree Learning Centre",
+                    "<b>Activities:</b> language games, role play & storytelling"
+                ],
+                enrollment: [
+                    "Online enrolment: www.appletree.com.hk",
+                    "Fee: $420 / participant",
+                    "Deadline: the 31st of May 2026"
+                ],
+                sponsor: "World Education Fund",
+                enquiry: "2 3 8 8 9 0 0 8",
+                whyPoints: [
+                    "Friendly English speaking environment -> everyone 😊",
+                    "<b>Benefit 2 and elaboration?</b>"
+                ],
+                offerPoints: [
+                    "<b>Offer 1?</b>",
+                    "<b>Offer 2?</b>"
+                ],
+                sample: [
+                    "Good morning! Thank you for calling the Apple Tree Learning Centre hotline.",
+                    "We are excited to share the news about our new event: English Fun Day!",
+                    "Perfect for kids aged seven to twelve, this event will be held on the 8th of July from 9 a.m. to 4 p.m. in our multi-purpose room.",
+                    "We have a lineup of activities ready, from language games to role-play and storytelling.",
+                    "Everyone will love practicing their English in our friendly English speaking environment.",
+                    "Plus, they will make great new friends while learning and it builds their confidence in everyday communication.",
+                    "Don't miss out! Secure your spot by visiting www.appletree.com.hk before the 31st of May, 2026.",
+                    "The fee is just 420 dollars per participant.",
+                    "As a special bonus, the World Education Fund is sponsoring a free phonics workbook and a Junior English Master certificate for all participants.",
+                    "Want to know more? Just give us a call at 2 3 8 8 9 0 0 8.",
+                    "Thank you for calling, and have a great day! Goodbye."
+                ],
+                exp: [
+                    {
+                        pattern: "Perfect for ?target group?, this event will be held on ?date? from ?time? to ?time? in our ?venue?.",
+                        example: "Perfect for kids aged seven to twelve, this event will be held on the 8th of July from 9 a.m. to 4 p.m. in our multi-purpose room."
+                    },
+                    {
+                        pattern: "We have a lineup of activities ready, from ?activity 1? to ?activity 2? and ?activity 3?.",
+                        example: "We have a lineup of activities ready, from language games to role-play and storytelling."
+                    },
+                    {
+                        pattern: "Secure your spot by visiting ?website? before ?deadline?.",
+                        example: "Secure your spot by visiting www.appletree.com.hk before the 31st of May, 2026."
+                    },
+                    {
+                        pattern: "As a special bonus, ?Sponsor? is sponsoring ?Offer 1? and ?Offer 2? for all participants.",
+                        example: "As a special bonus, the World Education Fund is sponsoring a free phonics workbook and a certificate for all participants."
+                    }
+                ]
+            },
+            p2: {
+                title: "United Charity<br>Mental Health Day",
+                enrollTitle: "Registration Method & Fee:",
+                details: [
+                    "For adults 18 - 30 years old",
+                    "<b>Date / Time / Venue:</b><br>1 Nov / 10 am - 1 pm / Hall 3, Central Town Hall",
+                    "<b>Activities:</b> sharing session, stress management workshop & relaxation exercises"
+                ],
+                enrollment: [
+                    "Online registration: www.united.org.hk",
+                    "Fee: $50 / person",
+                    "Deadline: 20 Oct 2026"
+                ],
+                sponsor: "City Care Fund",
+                enquiry: "3 1 6 8 9 4 5 0",
+                whyPoints: [
+                    "Useful tips from experts -> everybody 😊",
+                    "<b>Benefit 2 and elaboration?</b>"
+                ],
+                offerPoints: [
+                    "<b>Offer 1?</b>",
+                    "<b>Offer 2?</b>"
+                ],
+                sample: [
+                    "Good morning! Thank you for calling the United Charity hotline.",
+                    "We are excited to share the news about our new event: Mental Health Day!",
+                    "This event is designed for adults aged 18 to 30.",
+                    "It will take place on the 1st of November from 10 a.m. to 1 p.m. in Central Town Hall.",
+                    "We have planned different activities, including sharing sessions, stress management workshops, and relaxation exercises.",
+                    "Everyone will love the useful tips from the experts.",
+                    "Plus, you will learn practical techniques to effectively balance work demands and personal well-being.",
+                    "To enrol, please visit our website at www.united.org.hk by the 20th of October, 2026.",
+                    "The fee is 50 dollars per person.",
+                    "Thanks to the sponsorship of the City Care Fund, each participant will receive a guided meditation audio guide and a stress-relief sensory toolkit.",
+                    "For more details, please call 3 1 6 8 9 4 5 0.",
+                    "Thank you for calling, and have a great day! Goodbye."
+                ],
+                exp: [
+                    {
+                        pattern: "This event is designed for ?target group?. It will take place on ?date? from ?time? to ?time? in ?venue?.",
+                        example: "This event is designed for adults aged 18 to 30. It will take place on the 1st of November from 10 a.m. to 1 p.m. in Central Town Hall."
+                    },
+                    {
+                        pattern: "We have planned different activities, including ?activity 1?, ?activity 2?, and ?activity 3?.",
+                        example: "We have planned different activities, including sharing sessions, stress management workshops, and relaxation exercises."
+                    },
+                    {
+                        pattern: "To enrol, please visit our website at ?website? by ?deadline?.",
+                        example: "To enrol, please visit our website at www.united.org.hk by the 20th of October, 2026."
+                    },
+                    {
+                        pattern: "Thanks to the sponsorship of the ?Sponsor?, each participant will receive ?Offer 1? and ?Offer 2?.",
+                        example: "Thanks to the sponsorship of the City Care Fund, each participant will receive a guided meditation audio guide and a stress-relief sensory toolkit."
+                    }
+                ]
+            },
+            p3: {
+                title: "Graceful Heart<br>Youth Service Day",
+                enrollTitle: "Application Method & Fee:",
+                details: [
+                    "For full-time students aged 16 - 24",
+                    "<b>Date / Time / Venue:</b><br>15 Jan / 10 am - 3 pm / Grand Hall, Hong Kong College",
+                    "<b>Activities:</b> caring visits, food donation & tutoring services"
+                ],
+                enrollment: [
+                    "Online application: www.gracefulheart.com",
+                    "Fee: free of charge",
+                    "Deadline: 21 Jan 2026"
+                ],
+                sponsor: "Bright Development Fund",
+                enquiry: "2 6 1 1 3 8 4 4",
+                whyPoints: [
+                    "Meaningful volunteer work -> everybody 😊",
+                    "<b>Benefit 2 and elaboration?</b>"
+                ],
+                offerPoints: [
+                    "<b>Offer 1?</b>",
+                    "<b>Offer 2?</b>"
+                ],
+                sample: [
+                    "Good morning, and thank you for calling Graceful Heart.",
+                    "We warmly invite you to join our Youth Service Day.",
+                    "Open to full-time students aged 16 to 24, the event will be held on the 15th of January from 10 a.m. to 3 p.m. at the Grand Hall, Hong Kong College.",
+                    "Activities include caring visits, food donation, and tutoring services.",
+                    "By joining this event, everybody will be able to enjoy the meaningful volunteer work.",
+                    "Plus, you'll meet like-minded students and gain confidence by contributing in a supportive team setting.",
+                    "Applications can be made online at www.gracefulheart.com, and the deadline is the 21st of January.",
+                    "Participation is free of charge, with an official certificate of appreciation and a limited-edition volunteer T-shirt sponsored by the Bright Development Fund.",
+                    "For more information, please call 2 6 1 1 3 8 4 4.",
+                    "Thank you, and have a lovely day. Goodbye."
+                ],
+                exp: [
+                    {
+                        pattern: "Open to ?target group?, the event will be held on ?date? from ?time? to ?time? at ?venue?.",
+                        example: "Open to full-time students aged 16 to 24, the event will be held on the 15th of January from 10 a.m. to 3 p.m. at the Grand Hall, Hong Kong College."
+                    },
+                    {
+                        pattern: "Activities include ?activity 1?, ?activity 2?, and ?activity 3?.",
+                        example: "Activities include caring visits, food donation, and tutoring services."
+                    },
+                    {
+                        pattern: "Applications can be made online at ?website?, and the deadline is ?deadline?.",
+                        example: "Applications can be made online at www.gracefulheart.com, and the deadline is the 21st of January."
+                    },
+                    {
+                        pattern: "Participation is fee, with ?Offer 1? and ?Offer 2? sponsored by the ?Sponsor?.",
+                        example: "Participation is free of charge, with an official certificate of appreciation and a limited-edition volunteer T-shirt sponsored by the Bright Development Fund."
+                    }
+                ]
+            },
+            p4: {
+                title: "Miles Community Centre<br>Leadership Training Camp",
+                enrollTitle: "Registration Method & Fee:",
+                details: [
+                    "For young people 12 - 18 years old",
+                    "<b>Date / Time / Location:</b><br>21 Nov / 8 am - 6 pm / Lantau Island",
+                    "<b>Outdoor activities:</b> shelter building, nature hikes & team building games"
+                ],
+                enrollment: [
+                    "Online registration: www.miles.org.hk",
+                    "Fee: $550 / person",
+                    "Deadline: 15 Oct 2026"
+                ],
+                sponsor: "Talent Support Fund",
+                enquiry: "2 3 2 3 4 4 5 6",
+                whyPoints: [
+                    "Effective leadership skills -> everybody 😊",
+                    "<b>Benefit 2 and elaboration?</b>"
+                ],
+                offerPoints: [
+                    "<b>Offer 1?</b>",
+                    "<b>Offer 2?</b>"
+                ],
+                sample: [
+                    "Good morning. Thank you for contacting the Miles Community Centre.",
+                    "We are pleased to announce the launch of our Leadership Training Camp.",
+                    "This event is for young people between 12 and 18 years old.",
+                    "It is scheduled for the 21st of November, running from 8 a.m. to 6 p.m. on Lantau Island.",
+                    "The day will feature various outdoor activities, such as shelter building, nature hikes, and team building games.",
+                    "We highly recommend this camp as everybody will gain effective leadership skills.",
+                    "Furthermore, you will strengthen your mental resilience and dramatically improve your ability to work under pressure.",
+                    "For registration, please go to www.miles.org.hk before the 15th of October.",
+                    "The enrolment fee is 550 dollars per participant.",
+                    "We are also proud to mention that the Talent Support Fund is sponsoring complimentary first-aid kits and reusable stainless steel water bottles.",
+                    "For further enquiries, please contact us on 2 3 2 3 4 4 5 6.",
+                    "Thank you for calling. Goodbye."
+                ],
+                exp: [
+                    {
+                        pattern: "This event is for ?target group?. It is scheduled for ?date?, running from ?time? to ?time? on ?location?.",
+                        example: "This event is for young people between 12 and 18 years old. It is scheduled for the 21st of November, running from 8 a.m. to 6 p.m. on Lantau Island."
+                    },
+                    {
+                        pattern: "The day will feature various outdoor activities, such as ?activity 1?, ?activity 2?, and ?activity 3?.",
+                        example: "The day will feature various outdoor activities, such as shelter building, nature hikes, and team building games."
+                    },
+                    {
+                        pattern: "For registration, please go to ?website? before ?deadline?.",
+                        example: "For registration, please go to www.miles.org.hk before the 15th of October."
+                    },
+                    {
+                        pattern: "We are also proud to mention that the ?Sponsor? is sponsoring ?Offer 1? and ?Offer 2?.",
+                        example: "We are also proud to mention that the Talent Support Fund is sponsoring complimentary first-aid kits and reusable stainless steel water bottles."
+                    }
+                ]
+            },
+    suppA: {
+        title: "Vocational College<br>Workplace Safety Day",
+        enrollTitle: "Registration Method & Fee:",
+        details: [
+            "For young adults (aged 18-25)",
+            "<b>Date / Time / Venue:</b><br>22 Nov / 10:00am - 5:00pm / Central MTR Station",
+            "<b>Activities:</b> home safety demonstration, relaxing workshop"
+        ],
+        enrollment: [
+            "Telephone: 2655 7890",
+            "Free admission",
+            "Deadline: 25 Sept 2026"
+        ],
+        sponsor: "Citizens Care Fund",
+        enquiry: "2 6 5 5 7 8 9 0",
+        whyPoints: [
+            "Strengthen safety awareness ➔ participants 😊",
+            "<b>Benefit 2 and elaboration?</b>"
+        ],
+        offerPoints: [
+            "<b>Offer 1?</b>",
+            "<b>Offer 2?</b>"
+        ],
+        sample: [
+            "Good morning. Thank you for calling the Vocational College hotline.",
+            "We are happy to announce the launch of our new event, Workplace Safety Day.",
+            "Designed for young adults aged 18 to 25, this event will be held on the 22nd of November from 10 a.m. to 5 p.m. at Central MTR Station.",
+            "We have different activities planned, including home safety demonstrations and a relaxing workshop.",
+            "We highly encourage you to join us! It will strengthen your safety awareness, and we are confident that all participants will love it.",
+            "Plus, you will learn practical first aid skills and discover effective ways to manage daily stress.",
+            "Registration can be made by calling 2 6 5 5 7 8 9 0 on or before the 25th of September 2026.",
+            "Admission is entirely free.",
+            "Thanks to our sponsor, the Citizens Care Fund, participants will be offered a portable mini first-aid kit and an occupational health guidebook.",
+            "For more information, please call 2 6 5 5 7 8 9 0.",
+            "Thank you for calling our hotline. Have a nice day."
+        ],
+        exp: [
+            {
+                pattern: "Designed for ?target group?, this event will be held on ?date? from ?time? to ?time? at ?venue?.",
+                example: "Designed for young adults aged 18 to 25, this event will be held on the 22nd of November from 10 a.m. to 5 p.m. at Central MTR Station."
+            },
+            {
+                pattern: "We have different activities planned, including ?activity 1? and ?activity 2?.",
+                example: "We have different activities planned, including home safety demonstrations and a relaxing workshop."
+            },
+            {
+                pattern: "Registration can be made by calling ?number? on or before ?deadline?.",
+                example: "Registration can be made by calling 2655 7890 on or before the 25th of September 2026."
+            },
+            {
+                pattern: "Thanks to our sponsor, the ?Sponsor?, participants will be offered ?Offer 1? and ?Offer 2?.",
+                example: "Thanks to our sponsor, the Citizens Care Fund, participants will be offered a portable mini first-aid kit and an occupational health guidebook."
+            }
+        ]
+    },
+    suppB: {
+        title: "Tsuen Wan District Office<br>Anti-fraud Day",
+        enrollTitle: "Registration Method & Fee:",
+        details: [
+            "For families (with kids)",
+            "<b>Date / Time / Venue:</b><br>15 Oct / 9:30am - 4:00pm / Community Training Centre",
+            "<b>Activities:</b> drawing showcase, informative talks, safety demonstrations"
+        ],
+        enrollment: [
+            "Online registration: www.fsd.gov.hk",
+            "$20/person",
+            "Deadline: 8 Oct 2026"
+        ],
+        sponsor: "Community Safety Association",
+        enquiry: "2 8 0 7 9 9 9 9",
+        whyPoints: [
+            "Enhance fire safety awareness and practical knowledge for families ➔ participants 😊",
+            "<b>Benefit 2 and elaboration?</b>"
+        ],
+        offerPoints: [
+            "<b>Offer 1?</b>",
+            "<b>Offer 2?</b>"
+        ],
+        sample: [
+            "Good morning, and thank you for calling the Tsuen Wan District Office.",
+            "We warmly invite you to join our Anti-fraud Day.",
+            "Open to families with kids, the event will be held on the 15th of October from 9:30 a.m. to 4:00 p.m. at the Community Training Centre.",
+            "Activities include a drawing showcase, informative talks, and safety demonstrations.",
+            "By joining this event, you will be able to enhance fire safety awareness and practical knowledge for their families.",
+            "Plus, you will learn essential skills to identify common scams and protect your family from deception.",
+            "Registration can be made online at www.fsd.gov.hk, and the deadline is the 8th of October 2026.",
+            "The fee is 20 dollars per person.",
+            "With a family emergency contact magnet and an anti-scam informational booklet generously sponsored by the Community Safety Association.",
+            "For more information, please call 2 8 0 7 9 9 9 9.",
+            "Thank you, and have a lovely day. Goodbye."
+        ],
+        exp: [
+            {
+                pattern: "Open to ?target group?, the event will be held on ?date? from ?time? to ?time? at ?venue?.",
+                example: "Open to families with kids, the event will be held on the 15th of October from 9:30 a.m. to 4:00 p.m. at the Community Training Centre."
+            },
+            {
+                pattern: "Activities include a ?activity 1?, ?activity 2?, and ?activity 3?.",
+                example: "Activities include a drawing showcase, informative talks, and safety demonstrations."
+            },
+            {
+                pattern: "Registration can be made online at ?website?, and the deadline is ?deadline?.",
+                example: "Registration can be made online at www.fsd.gov.hk, and the deadline is the 8th of October 2026."
+            },
+            {
+                pattern: "With ?Offer 1? and ?Offer 2? generously sponsored by the ?Sponsor?.",
+                example: "With a family emergency contact magnet and an anti-scam informational booklet generously sponsored by the Community Safety Association."
+            }
+        ]
+    }
+};
+        let currentPracticeId = 'p1';
+
+        function navToLanding() {
+            document.getElementById('main-body').classList.add('landing-active');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-landing').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function navToMenu() {
+            document.getElementById('main-body').classList.remove('landing-active');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-menu').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function navTo(pageId) {
+            document.getElementById('main-body').classList.remove('landing-active');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+            if(pageId === 'page-practice') { setTimeout(adjustArrows, 100); }
+        }
+
+        function loadPractice(id) {
+            currentPracticeId = id;
+            const d = pData[id];
+            
+            let detailsHtml = d.details.map(x => `<li>${x}</li>`).join('');
+            let enrollHtml = d.enrollment.map(x => `<li>${x}</li>`).join('');
+            
+            document.getElementById('paper-left-container').innerHTML = `
+                <div class="box box-left" id="box-main">
+                    <div style="text-align: center; font-size: 1.3rem; font-weight: 600; margin-bottom: 15px; font-family: var(--font-paper-title); color: #1e3a8a;">${d.title}</div>
+                    <div id="target-details" style="position: relative;"><b>Details</b><button class="mobile-hint-btn" onclick="openModal('modal-why')">🤔 Why joining?</button><ul style="margin-top: 5px; padding-left: 20px;">${detailsHtml}</ul></div>
+                    <b style="margin-top: 10px; display: inline-block;">${d.enrollTitle}</b><ul style="margin-top: 5px; padding-left: 20px;">${enrollHtml}</ul>
+                    <div class="target-offer-box" id="target-offer"><b>Check out our special offers to participants sponsored by<br>${d.sponsor}</b><div style="margin-top: 8px;"><button class="mobile-hint-btn" style="margin:0;" onclick="openModal('modal-offers')">🎁 View Offers</button></div></div>
+                    <b>Enquiry</b><ul style="margin-top: 5px; margin-bottom: 0; padding-left: 20px;"><li>More information: ${d.enquiry}</li></ul>
+                </div>
+            `;
+
+            let whyHtml = d.whyPoints.map(x => `<li style="margin-top:5px;">${x}</li>`).join('');
+            let offerHtml = d.offerPoints.map(x => `<li style="margin-top:5px;">${x}</li>`).join('');
+
+            document.getElementById('desktop-hints-container').innerHTML = `
+                <div class="box box-right" id="box-why"><svg class="svg-arrow" id="why-arrow" viewBox="0 0 45 20" preserveAspectRatio="none"><path d="M45 10 L15 10 M15 10 L25 0 M15 10 L25 20" stroke="#f59e0b" stroke-width="3" fill="none"/></svg><div class="box-title">🤔 Why joining?</div><ul style="padding-left: 20px; margin-bottom: 0;">${whyHtml}</ul></div>
+                <div class="box box-right" id="box-offers"><svg class="svg-arrow" id="offer-arrow" viewBox="0 0 45 20" preserveAspectRatio="none"><path d="M45 10 L15 10 M15 10 L25 0 M15 10 L25 20" stroke="#f59e0b" stroke-width="3" fill="none"/></svg><div class="box-title">🎁 Offers to participants</div><ul style="padding-left: 20px; margin-bottom: 0;">${offerHtml}</ul></div>
+            `;
+            
+            document.getElementById('modal-content-why-list').innerHTML = whyHtml;
+            document.getElementById('modal-content-offers-list').innerHTML = offerHtml;
+
+            const sampleContainer = document.getElementById('sample-container');
+            sampleContainer.innerHTML = '';
+            d.sample.forEach(sentence => {
+                const row = document.createElement('div'); row.className = 'play-row'; row.style.borderBottom = '1px dashed #e5e7eb'; row.style.paddingBottom = '10px';
+                const btn = document.createElement('button'); btn.className = 'play-btn'; btn.innerHTML = '▶';
+                btn.onclick = (e) => { e.preventDefault(); if(synth.state === 'suspended') synth.resume(); speak(sentence); };
+                const textDiv = document.createElement('div'); textDiv.className = 'text-content'; textDiv.textContent = sentence;
+                row.appendChild(btn); row.appendChild(textDiv); sampleContainer.appendChild(row);
+                textDiv.parentNode.replaceChild(processNode(textDiv), textDiv);
+            });
+
+            const expContainer = document.getElementById('expressions-container');
+            expContainer.innerHTML = '';
+            d.exp.forEach(exp => {
+                const card = document.createElement('div'); card.className = 'exp-card play-row';
+                const btn = document.createElement('button'); btn.className = 'play-btn'; btn.innerHTML = '▶';
+                btn.onclick = (e) => { e.preventDefault(); if(synth.state === 'suspended') synth.resume(); speak(exp.example); };
+                const content = document.createElement('div'); content.className = 'text-content';
+                let formattedPattern = exp.pattern.replace(/\?(.*?)\?/g, '<span style="color:#f59e0b; font-weight:700;">$1</span>');
+                content.innerHTML = `<div style="font-weight:700; font-size:1rem; margin-bottom:6px; color:var(--text-main); line-height:1.4;">${formattedPattern}</div><div style="color:var(--text-muted); font-style:italic; font-size:0.95rem; font-weight: 500;"><span style="font-weight:700; color:var(--primary);">E.g.</span> ${exp.example}</div>`;
+                card.appendChild(btn); card.appendChild(content); expContainer.appendChild(card);
+            });
+
+            makeClickableArea('box-main'); makeClickableArea('box-why'); makeClickableArea('box-offers');
+            makeClickableArea('modal-content-why-list'); makeClickableArea('modal-content-offers-list');
+
+            if(mediaRecorder && mediaRecorder.state !== 'inactive') stopRecording();
+            document.getElementById('audio-preview').style.display = 'none';
+            document.getElementById('post-record-actions').style.display = 'none';
+            document.getElementById('share-status').style.display = 'none';
+            document.getElementById('timer').textContent = '00:00';
+
+            navTo('page-practice');
+        }
+
+        /* --- Modals Logic (Mobile) --- */
+        function openModal(id) { const modal = document.getElementById(id); modal.style.display = 'flex'; setTimeout(() => { modal.classList.add('show'); }, 10); document.body.style.overflow = 'hidden'; }
+        function closeModal(id) { const modal = document.getElementById(id); modal.classList.remove('show'); setTimeout(() => { modal.style.display = 'none'; document.body.style.overflow = ''; }, 300); }
+        function closeModalOnBG(event, id) { if (event.target.id === id) { closeModal(id); } }
+
+        /* --- Desktop Arrows Alignment --- */
+        function adjustArrows() {
+            if (window.innerWidth < 768) return;
+            const targetDetails = document.getElementById('target-details'); const boxWhy = document.getElementById('box-why'); const whyArrow = document.getElementById('why-arrow');
+            if(targetDetails && boxWhy && whyArrow) { whyArrow.style.top = Math.max(10, targetDetails.getBoundingClientRect().top - boxWhy.getBoundingClientRect().top + 20) + 'px'; }
+            const targetOffer = document.getElementById('target-offer'); const boxOffers = document.getElementById('box-offers'); const offerArrow = document.getElementById('offer-arrow');
+            if(targetOffer && boxOffers && offerArrow) { offerArrow.style.top = (targetOffer.getBoundingClientRect().top - boxOffers.getBoundingClientRect().top + targetOffer.getBoundingClientRect().height / 2) + 'px'; }
+        }
+        window.addEventListener('resize', adjustArrows);
+
+        /* --- Syllable & Dict & TTS --- */
+        const syllableDict = { "learning": "learn·ing", "centre": "cen·tre", "english": "eng·lish", "children": "chil·dren", "multi": "mul·ti", "purpose": "pur·pose", "activities": "ac·tiv·i·ties", "language": "lan·guage", "storytelling": "sto·ry·tell·ing", "enrolment": "en·rol·ment", "method": "meth·od", "online": "on·line", "participant": "par·tic·i·pant", "participants": "par·tic·i·pants", "deadline": "dead·line", "special": "spe·cial", "offers": "of·fers", "sponsored": "spon·sored", "education": "ed·u·ca·tion", "environment": "en·vi·ron·ment", "everyone": "ev·ery·one", "benefit": "ben·e·fit", "elaboration": "e·lab·o·ra·tion", "enquiry": "en·qui·ry", "information": "in·for·ma·tion", "morning": "morn·ing", "calling": "call·ing", "hotline": "hot·line", "excited": "ex·cit·ed", "perfect": "per·fect", "seven": "sev·en", "twelve": "twelve", "lineup": "line·up", "ready": "read·y", "practicing": "prac·tic·ing", "friendly": "friend·ly", "speaking": "speak·ing", "confidence": "con·fi·dence", "everyday": "ev·ery·day", "communication": "com·mu·ni·ca·tion", "secure": "se·cure", "visiting": "vis·it·ing", "before": "be·fore", "dollars": "dol·lars", "bonus": "bo·nus", "phonics": "phon·ics", "workbook": "work·book", "junior": "jun·ior", "master": "mas·ter", "certificate": "cer·tif·i·cate", "goodbye": "good·bye", "apple": "ap·ple", "july": "ju·ly", "united": "u·nit·ed", "charity": "char·i·ty", "mental": "men·tal", "health": "health", "adults": "a·dults", "november": "no·vem·ber", "central": "cen·tral", "different": "dif·fer·ent", "sharing": "shar·ing", "sessions": "ses·sions", "management": "man·age·ment", "workshops": "work·shops", "relaxation": "re·lax·a·tion", "exercises": "ex·er·cis·es", "useful": "use·ful", "experts": "ex·perts", "practical": "prac·ti·cal", "techniques": "tech·niques", "effectively": "ef·fec·tive·ly", "balance": "bal·ance", "demands": "de·mands", "personal": "per·son·al", "enrol": "en·rol", "website": "web·site", "october": "oc·to·ber", "person": "per·son", "sponsorship": "spon·sor·ship", "receive": "re·ceive", "guided": "guid·ed", "meditation": "med·i·ta·tion", "audio": "au·di·o", "sensory": "sen·so·ry", "toolkit": "tool·kit", "details": "de·tails", "graceful": "grace·ful", "service": "ser·vice", "warmly": "warm·ly", "invite": "in·vite", "students": "stu·dents", "january": "jan·u·ar·y", "college": "col·lege", "caring": "car·ing", "visits": "vis·its", "donation": "do·na·tion", "tutoring": "tu·tor·ing", "meaningful": "mean·ing·ful", "volunteer": "vol·un·teer", "minded": "mind·ed", "contributing": "con·trib·ut·ing", "supportive": "sup·port·ive", "setting": "set·ting", "applications": "ap·pli·ca·tions", "participation": "par·tic·i·pa·tion", "official": "of·fi·cial", "appreciation": "ap·pre·ci·a·tion", "limited": "lim·it·ed", "edition": "e·di·tion", "development": "de·vel·op·ment", "lovely": "love·ly", "community": "com·mu·ni·ty", "contacting": "con·tact·ing", "announce": "an·nounce", "leadership": "lead·er·ship", "training": "train·ing", "scheduled": "sched·uled", "running": "run·ning", "lantau": "lan·tau", "island": "is·land", "feature": "fea·ture", "various": "var·i·ous", "outdoor": "out·door", "shelter": "shel·ter", "nature": "na·ture", "highly": "high·ly", "recommend": "rec·om·mend", "furthermore": "fur·ther·more", "strengthen": "strength·en", "resilience": "re·sil·ience", "dramatically": "dra·mat·i·cal·ly", "improve": "im·prove", "ability": "a·bil·i·ty", "pressure": "pres·sure", "registration": "reg·is·tra·tion", "mention": "men·tion", "talent": "tal·ent", "support": "sup·port", "complimentary": "com·pli·men·ta·ry", "reusable": "re·us·a·ble", "stainless": "stain·less", "bottles": "bot·tles", "enquiries": "en·qui·ries" };
+        const meaningDict = { "jul": { spoken: "July", meaning: "July" }, "oct": { spoken: "October", meaning: "October" }, "nov": { spoken: "November", meaning: "November" }, "jan": { spoken: "January", meaning: "January" }, "feb": { spoken: "February", meaning: "February" }, "am": { spoken: "a. m.", meaning: "Morning" }, "pm": { spoken: "p. m.", meaning: "Afternoon" } };
+        
+        const synth = window.speechSynthesis;
+        let voiceUK = null, voiceUS = null;
+        
+        function initVoices() {
+            const voices = synth.getVoices();
+            voiceUK = voices.find(v => v.lang === 'en-GB' && v.name.includes('Google')) || voices.find(v => v.lang === 'en-GB' && v.name.includes('Siri')) || voices.find(v => v.lang === 'en-GB') || voices[0];
+            voiceUS = voices.find(v => v.lang === 'en-US' && v.name.includes('Google')) || voices.find(v => v.lang === 'en-US' && v.name.includes('Siri')) || voices.find(v => v.lang === 'en-US') || voices[0];
+        }
+        if (speechSynthesis.onvoiceschanged !== undefined) { speechSynthesis.onvoiceschanged = initVoices; }
+        
+        function syncAccents(val) { document.getElementById('accent-select').value = val; document.getElementById('accent-select-2').value = val; }
+        function updateVoice() {}
+        
+        function speak(text) {
+            if (synth.speaking) synth.cancel();
+            if (!voiceUK || !voiceUS) initVoices();
+            const utterThis = new SpeechSynthesisUtterance(text);
+            utterThis.voice = document.getElementById('accent-select').value === 'UK' ? voiceUK : voiceUS;
+            utterThis.rate = parseFloat(document.getElementById('speed-select').value);
+            synth.speak(utterThis);
+        }
+
+        /* --- Syllable Auto-Generator --- */
+        function countSyllables(word) {
+            word = word.toLowerCase(); if(word.length <= 3) return 1;
+            word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, ''); word = word.replace(/^y/, ''); return word.match(/[aeiouy]{1,2}/g)?.length || 1;
+        }
+        function generateSyllables(word) {
+            let count = countSyllables(word); if (count <= 1) return word;
+            let w = word.toLowerCase(); let result = []; let chunk = Math.ceil(w.length / count);
+            for(let i=0; i<w.length; i+=chunk) { result.push(w.substring(i, i+chunk)); }
+            return result.join('·');
+        }
+
+        function adjustTooltipPosition(tooltip, spanRect) {
+            tooltip.style.transform = 'translateX(-50%)'; tooltip.style.left = '50%';
+            const tooltipRect = tooltip.getBoundingClientRect(), viewportWidth = window.innerWidth;
+            if (tooltipRect.right > viewportWidth - 5) { tooltip.style.transform = `translateX(calc(-50% - ${tooltipRect.right - viewportWidth + 10}px))`; }
+            else if (tooltipRect.left < 5) { tooltip.style.transform = `translateX(calc(-50% + ${10 - tooltipRect.left}px))`; }
+        }
+
+        function processNode(node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.textContent; if (!text.trim()) return node;
+                const fragment = document.createDocumentFragment();
+                const tokens = text.match(/([a-zA-Z0-9]+)|([^a-zA-Z0-9]+)/g);
+                tokens.forEach(token => {
+                    if (/^[a-zA-Z0-9]+$/.test(token)) {
+                        const span = document.createElement('span'); span.className = 'clickable-word'; span.textContent = token;
+                        const lowerToken = token.toLowerCase();
+                        let syllables = syllableDict[lowerToken]; const customMeaning = meaningDict[lowerToken];
+                        if (!/^[0-9]+$/.test(token) && !syllables && token.length > 4 && countSyllables(token) > 1) { syllables = generateSyllables(token); }
+                        
+                        let sylTooltip = null; let meaningTooltip = null;
+                        if (syllables && syllables !== lowerToken) { sylTooltip = document.createElement('span'); sylTooltip.className = 'syllable-tooltip'; sylTooltip.textContent = syllables; span.appendChild(sylTooltip); }
+                        if (customMeaning) { meaningTooltip = document.createElement('span'); meaningTooltip.className = 'meaning-tooltip'; meaningTooltip.textContent = customMeaning.meaning; if (sylTooltip) { sylTooltip.style.bottom = 'calc(100% + 30px)'; } span.appendChild(meaningTooltip); }
+
+                        span.addEventListener('click', function(e) {
+                            e.preventDefault(); e.stopPropagation();
+                            if(synth.state === 'suspended') synth.resume();
+                            speak(customMeaning ? customMeaning.spoken : token);
+                            this.style.backgroundColor = 'var(--primary)'; this.style.color = 'white'; this.classList.add('show-tooltip');
+                            if (sylTooltip) setTimeout(() => adjustTooltipPosition(sylTooltip, this.getBoundingClientRect()), 10);
+                            if (meaningTooltip) setTimeout(() => adjustTooltipPosition(meaningTooltip, this.getBoundingClientRect()), 10);
+                            setTimeout(() => { this.style.backgroundColor = ''; this.style.color = ''; this.classList.remove('show-tooltip'); }, 800);
+                        });
+                        fragment.appendChild(span);
+                    } else { fragment.appendChild(document.createTextNode(token)); }
+                });
+                return fragment;
+            }
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                if (['BUTTON', 'SVG', 'A'].includes(node.tagName) || node.classList.contains('play-btn') || node.classList.contains('mobile-hint-btn')) return node.cloneNode(true);
+                const clone = node.cloneNode(false);
+                Array.from(node.childNodes).forEach(child => clone.appendChild(processNode(child)));
+                return clone;
+            }
+            return node.cloneNode(true);
+        }
+
+        function makeClickableArea(id) { const container = document.getElementById(id); if (container) { const newContent = processNode(container); container.parentNode.replaceChild(newContent, container); } }
+
+        /* --- Audio Recorder --- */
+        let mediaRecorder; let audioChunks = []; let timerInterval; let seconds = 0; let currentBlob = null;
+        function updateTimer() { seconds++; const mins = Math.floor(seconds / 60).toString().padStart(2, '0'); const secs = (seconds % 60).toString().padStart(2, '0'); document.getElementById('timer').textContent = `${mins}:${secs}`; }
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream); audioChunks = [];
+                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+                mediaRecorder.onstop = () => {
+                    currentBlob = new Blob(audioChunks, { type: 'audio/mp3' }); const audioUrl = URL.createObjectURL(currentBlob);
+                    const audio = document.getElementById('audio-preview'); audio.src = audioUrl; audio.style.display = 'block';
+                    document.getElementById('post-record-actions').style.display = 'flex';
+                    
+                    if (navigator.canShare && navigator.canShare({ files: [new File([currentBlob], 'pitch.mp3', { type: 'audio/mp3' })] })) {
+                        document.getElementById('btn-share').style.display = 'flex'; document.getElementById('btn-download').style.display = 'none';
+                    } else {
+                        document.getElementById('btn-share').style.display = 'none'; const dlBtn = document.getElementById('btn-download'); dlBtn.style.display = 'flex'; dlBtn.href = audioUrl; dlBtn.download = `Pitch_${currentPracticeId}.mp3`;
+                        document.getElementById('share-status').style.display = 'block'; document.getElementById('share-status').textContent = 'Your browser does not support direct sharing. Please download and send manually.';
+                    }
+                };
+                mediaRecorder.start(); document.getElementById('btn-start').style.display = 'none'; document.getElementById('btn-stop').style.display = 'flex';
+                const timerEl = document.getElementById('timer'); timerEl.classList.add('recording');
+                seconds = 0; timerEl.textContent = '00:00'; timerInterval = setInterval(updateTimer, 1000);
+                document.getElementById('audio-preview').style.display = 'none'; document.getElementById('post-record-actions').style.display = 'none'; document.getElementById('share-status').style.display = 'none';
+            } catch (err) { alert("Microphone access is needed to record."); }
+        }
+        function stopRecording() { if (mediaRecorder && mediaRecorder.state !== 'inactive') { mediaRecorder.stop(); mediaRecorder.stream.getTracks().forEach(track => track.stop()); } document.getElementById('btn-stop').style.display = 'none'; document.getElementById('btn-start').style.display = 'flex'; clearInterval(timerInterval); document.getElementById('timer').classList.remove('recording'); }
+        async function shareAudio() {
+            if (!currentBlob) return;
+            const file = new File([currentBlob], `Pitch_${currentPracticeId}.mp3`, { type: 'audio/mp3' });
+            const statusText = document.getElementById('share-status'); statusText.style.display = 'block';
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try { statusText.textContent = "Opening share menu..."; await navigator.share({ files: [file], title: 'My Pitch', text: 'Here is my recorded pitch!' }); statusText.textContent = "Shared successfully!"; setTimeout(()=>statusText.style.display='none', 3000); } catch (error) { statusText.textContent = "Share cancelled or failed."; setTimeout(()=>statusText.style.display='none', 3000); }
+            }
+        }
+    </script>
+</body>
+</html>
