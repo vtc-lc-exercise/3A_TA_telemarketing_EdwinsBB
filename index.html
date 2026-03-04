@@ -87,7 +87,7 @@
                 display: block;
                 text-align: center;
             }
-            .sparkle { display: none; } /* Hide sparkles on small mobile to save space */
+            .sparkle { display: none; }
         }
         #page-landing { text-align: center; padding: 20px; width: 100%; max-width: 800px; margin: 0 auto; font-family: var(--font-title); }
         
@@ -511,7 +511,7 @@
 
     <div id="modal-offers" class="modal" onclick="closeModalOnBG(event, 'modal-offers')">
         <div class="modal-content" id="modal-content-offers">
-            <button class="modal-close" onclick="closeModal('modal-why')">&times;</button>
+            <button class="modal-close" onclick="closeModal('modal-offers')">&times;</button>
             <div class="box-title" style="font-size: 1.2rem; border-color: var(--accent); color: var(--accent);">
                 🎁 Offers to participants
             </div>
@@ -537,7 +537,6 @@
     </div>
 
     <script>
-    
     /* --- Password Logic --- */
     function openPasswordModal() {
         document.getElementById("supp-password-input").value = "";
@@ -1112,8 +1111,8 @@
             "jan": { spoken: "January", meaning: "January" },
             "feb": { spoken: "February", meaning: "February" },
             "sept": { spoken: "September", meaning: "September" },
-            "am": { spoken: "a. m.", meaning: "Morning" },
-            "pm": { spoken: "p. m.", meaning: "Afternoon" }
+            "am": { spoken: "a m", meaning: "Morning" },
+            "pm": { spoken: "p m", meaning: "Afternoon" }
         };
 
         const synth = window.speechSynthesis;
@@ -1122,13 +1121,11 @@
 
         function initVoices() {
             const voices = synth.getVoices();
-            
             const getBestVoice = (lang, preferredNames) => {
                 let voice = voices.find(v => v.lang.startsWith(lang) && preferredNames.some(name => v.name.includes(name)));
                 if (!voice) voice = voices.find(v => v.lang.startsWith(lang));
                 return voice || voices[0];
             };
-
             voiceUK = getBestVoice('en-GB', ['Google', 'Natural', 'Enhanced', 'Serena', 'Daniel']);
             voiceUS = getBestVoice('en-US', ['Google', 'Natural', 'Enhanced', 'Samantha', 'Alex', 'Ava']);
         }
@@ -1148,22 +1145,50 @@
             if (synth.speaking) synth.cancel();
             if (!voiceUK || !voiceUS) initVoices();
             
+            // Fix URL and .gov pronunciation
             let spokenText = text
                 .replace(/\.org/gi, ' dot org')
                 .replace(/\.com/gi, ' dot com')
-                .replace(/\.gov/gi, ' dot gov')
+                .replace(/\.gov/gi, ' dot gov') 
                 .replace(/\.hk/gi, ' dot h k')
                 .replace(/www\./gi, 'www dot ');
+
+            // 針對 Samsung Android 數字變中文嘅終極防護：強制將部分常見數字轉做英文單字
+            spokenText = spokenText
+                .replace(/420/g, "four hundred and twenty")
+                .replace(/550/g, "five hundred and fifty")
+                .replace(/50/g, "fifty")
+                .replace(/20/g, "twenty")
+                .replace(/\b7\b/g, "seven")
+                .replace(/\b12\b/g, "twelve")
+                .replace(/\b18\b/g, "eighteen")
+                .replace(/\b30\b/g, "thirty")
+                .replace(/\b16\b/g, "sixteen")
+                .replace(/\b24\b/g, "twenty four")
+                .replace(/\b25\b/g, "twenty five");
             
             const utterThis = new SpeechSynthesisUtterance(spokenText);
-            utterThis.voice = document.getElementById('accent-select').value === 'UK' ? voiceUK : voiceUS;
             
-            const speed = parseFloat(document.getElementById('speed-select').value);
-            utterThis.rate = speed;
-            utterThis.pitch = 1.05; 
+            // 獲取使用者選擇嘅口音
+            const selectedAccent = document.getElementById('accent-select').value;
+            
+            // 針對 Android：強制鎖死語言標籤 (lang)！！！
+            utterThis.lang = selectedAccent === 'UK' ? 'en-GB' : 'en-US';
+            
+            utterThis.voice = selectedAccent === 'UK' ? voiceUK : voiceUS;
+            utterThis.rate = parseFloat(document.getElementById('speed-select').value);
+            utterThis.pitch = 1.05; // Slightly higher pitch for naturalness
             utterThis.volume = 1.0;
+            
+            // 針對部分手機：確保每次讀之前 resume 引擎
+            if (synth.state === 'suspended') {
+                synth.resume();
+            }
 
-            synth.speak(utterThis);
+            // 加少少 delay 先讀，確保 Android 引擎準備好
+            setTimeout(() => {
+                synth.speak(utterThis);
+            }, 50);
         }
 
         /* --- Syllable Auto-Generator --- */
@@ -1208,6 +1233,7 @@ function processNode(node) {
 
                 const fragment = document.createDocumentFragment();
                 
+                // Regex matches time like "10:00" OR alphanumeric words OR other symbols
                 const tokens = text.match(/(\d{1,2}:\d{2})|([a-zA-Z0-9]+)|([^a-zA-Z0-9]+)/g);
                 if (!tokens) return node;
                 
@@ -1231,16 +1257,23 @@ function processNode(node) {
                         let customMeaning = meaningDict[lowerToken];
                         let spokenText = token;
 
+                        // 1. Time Check (e.g. "10:00")
                         if (/^\d{1,2}:\d{2}$/.test(token)) {
                             let parts = token.split(':');
                             let hour = parseInt(parts[0]);
                             let minute = parseInt(parts[1]);
-                            spokenText = hour.toString();
-                            if (minute !== 0) {
-                                spokenText += " " + (minute < 10 ? "oh " + minute : minute);
+                            
+                            const numToWords = ["twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
+                            
+                            if (minute === 0) {
+                                spokenText = numToWords[hour % 12 || 12];
+                            } else {
+                                spokenText = hour.toString() + " " + (minute < 10 ? "oh " + minute : minute);
                             }
+                            
                             customMeaning = { spoken: spokenText, meaning: "Time" };
                         } 
+                        // 2. Date Ordinal Check (lookahead for months)
                         else if (/^\d+$/.test(token) && parseInt(token) >= 1 && parseInt(token) <= 31) {
                             let nextWord = null;
                             for (let j = i + 1; j < tokens.length; j++) {
