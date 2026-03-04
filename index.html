@@ -511,7 +511,7 @@
 
     <div id="modal-offers" class="modal" onclick="closeModalOnBG(event, 'modal-offers')">
         <div class="modal-content" id="modal-content-offers">
-            <button class="modal-close" onclick="closeModal('modal-offers')">&times;</button>
+            <button class="modal-close" onclick="closeModal('modal-why')">&times;</button>
             <div class="box-title" style="font-size: 1.2rem; border-color: var(--accent); color: var(--accent);">
                 🎁 Offers to participants
             </div>
@@ -573,11 +573,11 @@
                 enquiry: "2 3 8 8 9 0 0 8",
                 whyPoints: [
                     "Friendly English speaking environment -> everyone 😊",
-                    "<b>Benefit 2 and elaboration?</b>"
+                    "Plus, they will make great new friends while learning and it builds their confidence in everyday communication."
                 ],
                 offerPoints: [
-                    "<b>Offer 1?</b>",
-                    "<b>Offer 2?</b>"
+                    "Free phonics workbook",
+                    "Junior English Master certificate"
                 ],
                 sample: [
                     "Good morning! Thank you for calling the Apple Tree Learning Centre hotline.",
@@ -628,11 +628,11 @@
                 enquiry: "3 1 6 8 9 4 5 0",
                 whyPoints: [
                     "Useful tips from experts -> everybody 😊",
-                    "<b>Benefit 2 and elaboration?</b>"
+                    "You will learn practical techniques to effectively balance work demands and personal well-being."
                 ],
                 offerPoints: [
-                    "<b>Offer 1?</b>",
-                    "<b>Offer 2?</b>"
+                    "Guided meditation audio guide",
+                    "Stress-relief sensory toolkit"
                 ],
                 sample: [
                     "Good morning! Thank you for calling the United Charity hotline.",
@@ -684,11 +684,11 @@
                 enquiry: "2 6 1 1 3 8 4 4",
                 whyPoints: [
                     "Meaningful volunteer work -> everybody 😊",
-                    "<b>Benefit 2 and elaboration?</b>"
+                    "You'll meet like-minded students and gain confidence by contributing in a supportive team setting."
                 ],
                 offerPoints: [
-                    "<b>Offer 1?</b>",
-                    "<b>Offer 2?</b>"
+                    "Official certificate of appreciation",
+                    "Limited-edition volunteer T-shirt"
                 ],
                 sample: [
                     "Good morning, and thank you for calling Graceful Heart.",
@@ -738,11 +738,11 @@
                 enquiry: "2 3 2 3 4 4 5 6",
                 whyPoints: [
                     "Effective leadership skills -> everybody 😊",
-                    "<b>Benefit 2 and elaboration?</b>"
+                    "Furthermore, you will strengthen your mental resilience and dramatically improve your ability to work under pressure."
                 ],
                 offerPoints: [
-                    "<b>Offer 1?</b>",
-                    "<b>Offer 2?</b>"
+                    "Complimentary first-aid kit",
+                    "Reusable stainless steel water bottle"
                 ],
                 sample: [
                     "Good morning. Thank you for contacting the Miles Community Centre.",
@@ -794,11 +794,11 @@
         enquiry: "2 6 5 5 7 8 9 0",
         whyPoints: [
             "Strengthen safety awareness ➔ participants 😊",
-            "<b>Benefit 2 and elaboration?</b>"
+            "Plus, you will learn practical first aid skills and discover effective ways to manage daily stress."
         ],
         offerPoints: [
-            "<b>Offer 1?</b>",
-            "<b>Offer 2?</b>"
+            "Portable mini first-aid kit",
+            "Occupational health guidebook"
         ],
         sample: [
             "Good morning. Thank you for calling the Vocational College hotline.",
@@ -837,11 +837,11 @@
         enquiry: "2 8 0 7 9 9 9 9",
         whyPoints: [
             "Enhance fire safety awareness and practical knowledge for families ➔ participants 😊",
-            "<b>Benefit 2 and elaboration?</b>"
+            "Plus, you will learn essential skills to identify common scams and protect your family from deception."
         ],
         offerPoints: [
-            "<b>Offer 1?</b>",
-            "<b>Offer 2?</b>"
+            "Family emergency contact magnet",
+            "Anti-scam informational booklet"
         ],
         sample: [
             "Good morning, and thank you for calling the Tsuen Wan District Office.",
@@ -1122,13 +1122,15 @@
 
         function initVoices() {
             const voices = synth.getVoices();
-            voiceUK = voices.find(v => v.lang === 'en-GB' && v.name.includes('Google')) || 
-                      voices.find(v => v.lang === 'en-GB' && v.name.includes('Siri')) || 
-                      voices.find(v => v.lang === 'en-GB') || voices[0];
             
-            voiceUS = voices.find(v => v.lang === 'en-US' && v.name.includes('Google')) || 
-                      voices.find(v => v.lang === 'en-US' && v.name.includes('Siri')) || 
-                      voices.find(v => v.lang === 'en-US') || voices[0];
+            const getBestVoice = (lang, preferredNames) => {
+                let voice = voices.find(v => v.lang.startsWith(lang) && preferredNames.some(name => v.name.includes(name)));
+                if (!voice) voice = voices.find(v => v.lang.startsWith(lang));
+                return voice || voices[0];
+            };
+
+            voiceUK = getBestVoice('en-GB', ['Google', 'Natural', 'Enhanced', 'Serena', 'Daniel']);
+            voiceUS = getBestVoice('en-US', ['Google', 'Natural', 'Enhanced', 'Samantha', 'Alex', 'Ava']);
         }
 
         if (speechSynthesis.onvoiceschanged !== undefined) {
@@ -1146,7 +1148,6 @@
             if (synth.speaking) synth.cancel();
             if (!voiceUK || !voiceUS) initVoices();
             
-            // ✅ Fix URL pronunciation
             let spokenText = text
                 .replace(/\.org/gi, ' dot org')
                 .replace(/\.com/gi, ' dot com')
@@ -1156,7 +1157,12 @@
             
             const utterThis = new SpeechSynthesisUtterance(spokenText);
             utterThis.voice = document.getElementById('accent-select').value === 'UK' ? voiceUK : voiceUS;
-            utterThis.rate = parseFloat(document.getElementById('speed-select').value);
+            
+            const speed = parseFloat(document.getElementById('speed-select').value);
+            utterThis.rate = speed;
+            utterThis.pitch = 1.05; 
+            utterThis.volume = 1.0;
+
             synth.speak(utterThis);
         }
 
@@ -1202,7 +1208,6 @@ function processNode(node) {
 
                 const fragment = document.createDocumentFragment();
                 
-                // Regex matches time like "10:00" OR alphanumeric words OR other symbols
                 const tokens = text.match(/(\d{1,2}:\d{2})|([a-zA-Z0-9]+)|([^a-zA-Z0-9]+)/g);
                 if (!tokens) return node;
                 
@@ -1216,7 +1221,6 @@ function processNode(node) {
                 for (let i = 0; i < tokens.length; i++) {
                     const token = tokens[i];
                     
-                    // Check if token is a time like "10:00" or a normal alphanumeric word
                     if (/^\d{1,2}:\d{2}$/.test(token) || /^[a-zA-Z0-9]+$/.test(token)) {
                         const span = document.createElement('span');
                         span.className = 'clickable-word';
@@ -1227,16 +1231,17 @@ function processNode(node) {
                         let customMeaning = meaningDict[lowerToken];
                         let spokenText = token;
 
-                        // 1. Time Check (e.g. "10:00")
                         if (/^\d{1,2}:\d{2}$/.test(token)) {
                             let parts = token.split(':');
-                            spokenText = parts[0];
-                            if (parts[1] !== "00") spokenText += " " + parts[1];
+                            let hour = parseInt(parts[0]);
+                            let minute = parseInt(parts[1]);
+                            spokenText = hour.toString();
+                            if (minute !== 0) {
+                                spokenText += " " + (minute < 10 ? "oh " + minute : minute);
+                            }
                             customMeaning = { spoken: spokenText, meaning: "Time" };
                         } 
-                        // 2. Date Ordinal Check (lookahead for months)
                         else if (/^\d+$/.test(token) && parseInt(token) >= 1 && parseInt(token) <= 31) {
-                            // look ahead for the next word
                             let nextWord = null;
                             for (let j = i + 1; j < tokens.length; j++) {
                                 if (/^[a-zA-Z]+$/.test(tokens[j])) {
@@ -1250,13 +1255,11 @@ function processNode(node) {
                             }
                         }
 
-                        // Use global meaning dictionary if no context override
                         if (!/^\d{1,2}:\d{2}$/.test(token) && !customMeaning && meaningDict[lowerToken]) {
                             customMeaning = meaningDict[lowerToken];
                             spokenText = customMeaning.spoken;
                         }
 
-                        // Syllables generation
                         if (!/^[0-9]+$/.test(token) && !/^\d{1,2}:\d{2}$/.test(token) && !syllables && token.length > 4 && countSyllables(token) > 1) {
                             syllables = generateSyllables(token);
                         }
