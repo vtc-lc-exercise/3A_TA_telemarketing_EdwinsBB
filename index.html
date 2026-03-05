@@ -363,6 +363,14 @@
                             <div class="option-icon" style="background: #fef3c7; color: var(--accent);">B</div>
                             <div class="option-text"><h3 style="color: var(--accent);">Practice B</h3><p>Tsuen Wan District Office</p></div>
                         </div>
+                        <div class="option-card" onclick="loadPractice('suppC')">
+                            <div class="option-icon" style="background: #fef3c7; color: var(--accent);">C</div>
+                            <div class="option-text"><h3 style="color: var(--accent);">Practice C</h3><p>Tuen Mun District Office</p></div>
+                        </div>
+                        <div class="option-card" onclick="loadPractice('suppD')">
+                            <div class="option-icon" style="background: #fef3c7; color: var(--accent);">D</div>
+                            <div class="option-text"><h3 style="color: var(--accent);">Practice D</h3><p>Yuen Long District Office</p></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -830,9 +838,80 @@
             { pattern: "Registration can be made online at ?website?, and the deadline is ?deadline?.", example: "Registration can be made online at www.fsd.gov.hk, and the deadline is the 8th of October 2026." },
             { pattern: "With ?Offer 1? and ?Offer 2? generously sponsored by the ?Sponsor?.", example: "With a family emergency contact magnet and an anti-scam informational booklet generously sponsored by the Community Safety Association." }
         ]
-    }
-};
-    let currentPracticeId = 'p1';
+    },
+    suppC: {
+            title: "Tuen Mun District Office<br>Sports Carnival",
+            enrollTitle: "Enrolment Method & Fee",
+            details: [
+                "For primary school students",
+                "<b>Date / Time / Venue:</b><br>18 Apr / 9:00am - 1:00pm / Tuen Mun Square",
+                "<b>Activities:</b> safety cartoon show, interactive escape trial, uniform try-on booth"
+            ],
+            enrollment: ["Online registration: www.tmd.gov.hk", "$30/person", "Deadline: 25 Mar 2026"],
+            sponsor: "Education Development Association", 
+            enquiry: "2 4 8 8 1 1 2 2",
+            whyPoints: [
+                "Broaden kids' horizons through an interesting and interactive learning experience - participants", 
+                "<b>Benefit 2 and elaboration?</b>"
+            ], 
+            offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
+            sample: [
+                "Good morning! Welcome to the Tuen Mun District Office hotline.",
+                "We are excited to announce our upcoming event: the Sports Carnival.",
+                "Designed for primary school students, the event will be held on the 18th of April from 9:00 am to 1:00 pm at Tuen Mun Square.",
+                "There will be a wide range of activities that day, including a safety cartoon show, an interactive escape trial, and a uniform try-on booth.",
+                "We highly recommend joining us! Your kids will broaden their horizons through a fun, interactive learning experience that we are confident they will love.",
+                "Plus, participants will develop strong teamwork skills and build immense confidence through engaging physical challenges.",
+                "To enrol, please visit www.tmd.gov.hk on or before the 25th of March 2026.",
+                "The fee is 30 dollars per person.",
+                "Participants will receive a set of sports wristbands and a mini puzzle game, generously sponsored by the Education Development Association.",
+                "For more information, please call 2 4 8 8 1 1 2 2.",
+                "Thank you for using our hotline. We hope to see you there! Bye!"
+            ],
+            exp: [
+                {pattern: "Designed for ?target group?, the event will be held on ?date? from ?time? to ?time? at ?venue?.", example: "Designed for primary school students, the event will be held on the 18th of April from 9:00 am to 1:00 pm at Tuen Mun Square."},
+                {pattern: "There will be a wide range of activities that day, including ?activity 1?, ?activity 2?, and ?activity 3?.", example: "There will be a wide range of activities that day, including a safety cartoon show, an interactive escape trial, and a uniform try-on booth."},
+                {pattern: "To enrol, please visit ?website? on or before ?deadline?.", example: "To enrol, please visit www.tmd.gov.hk on or before the 25th of March 2026."}
+            ]
+        },
+        suppD: {
+            title: "Yuen Long District Office<br>FarmFest",
+            enrollTitle: "Enrolment Method & Fee",
+            details: [
+                "For working adults (aged 25-45)",
+                "<b>Date / Time / Venue:</b><br>12 May / 6:30pm - 9:30pm / Yuen Long Farm",
+                "<b>Activities:</b> organic farming, workshop, game booths"
+            ],
+            enrollment: ["Online enrolment: www.yld.gov.hk", "$145/person", "Deadline: 19 Apr 2026"],
+            sponsor: "Occupational Health Association", 
+            enquiry: "2 9 6 6 3 3 7 7",
+            whyPoints: [
+                "Learn practical farming skills and raise awareness of eco-farming - participants", 
+                "<b>Benefit 2 and elaboration?</b>"
+            ],
+            offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
+            sample: [
+                "Good morning! Welcome to the Yuen Long District Office hotline.",
+                "Step out of the office and into nature with our upcoming event, FarmFest.",
+                "Designed for working adults aged 25 to 45, this relaxing evening will be held on the 12th of May, from 6:30 pm to 9:30 pm at Yuen Long Farm.",
+                "You can look forward to a mindful evening featuring organic farming, a workshop, and game booths.",
+                "By joining us, you will learn practical farming skills and raise awareness of eco-farming.",
+                "Plus, you will greatly improve your mental health by engaging in relaxing outdoor farming activities.",
+                "Please complete your enrolment at www.yld.gov.hk before the 19th of April 2026.",
+                "The fee is 145 dollars per person.",
+                "Check out our special offers to participants sponsored by the Occupational Health Association!",
+                "Everyone will take home a set of organic vegetable seeds and a relaxing herbal tea pack.",
+                "For more information, please call 2 9 6 6 3 3 7 7.",
+                "Thank you for calling, and have a nice day! Bye."
+            ],
+            exp: [
+                {pattern: "Designed for ?target group?, this relaxing evening will be held on ?date? from ?time? to ?time? at ?venue?.", example: "Designed for working adults aged 25 to 45, this relaxing evening will be held on the 12th of May, from 6:30 pm to 9:30 pm at Yuen Long Farm."},
+                {pattern: "You can look forward to a mindful evening featuring ?activity 1?, ?activity 2?, and ?activity 3?.", example: "You can look forward to a mindful evening featuring organic farming, a workshop, and game booths."},
+                {pattern: "Please complete your enrolment at ?website? before ?deadline?.", example: "Please complete your enrolment at www.yld.gov.hk before the 19th of April 2026."}
+            ]
+        }
+    };
+let currentPracticeId = 'p1';
 
         function navToLanding() {
             document.getElementById('main-body').classList.add('landing-active');
@@ -1067,6 +1146,8 @@
             "jan": { spoken: "January", meaning: "January" },
             "feb": { spoken: "February", meaning: "February" },
             "sept": { spoken: "September", meaning: "September" },
+            "apr": { spoken: "April", meaning: "April" },
+            "mar": { spoken: "March", meaning: "March" },
             "am": { spoken: "a m", meaning: "Morning" },
             "pm": { spoken: "p m", meaning: "Afternoon" },
             "gov": { spoken: "g o v", meaning: "Government" },
@@ -1080,15 +1161,16 @@
 
         function initVoices() {
             const voices = synth.getVoices();
-            const getBestVoice = (lang, preferredNames) => {
-                let voice = voices.find(v => v.lang.startsWith(lang) && preferredNames.some(name => v.name.includes(name)));
-                if (!voice) voice = voices.find(v => v.lang.startsWith(lang));
-                return voice || voices[0];
-            };
-            voiceUK = getBestVoice('en-GB', ['Google', 'Natural', 'Enhanced', 'Serena', 'Daniel']);
-            voiceUS = getBestVoice('en-US', ['Google', 'Natural', 'Enhanced', 'Samantha', 'Alex', 'Ava']);
+            if (voices.length === 0) return;
+            voiceUK = voices.find(v => v.lang.includes('en-GB') && v.name.includes('Google')) ||
+                      voices.find(v => v.lang.includes('en-GB') && v.name.includes('Siri')) ||
+                      voices.find(v => v.lang.includes('en-GB')) ||
+                      voices.find(v => v.lang.includes('en'));
+            voiceUS = voices.find(v => v.lang.includes('en-US') && v.name.includes('Google')) ||
+                      voices.find(v => v.lang.includes('en-US') && v.name.includes('Siri')) ||
+                      voices.find(v => v.lang.includes('en-US')) ||
+                      voices.find(v => v.lang.includes('en'));
         }
-
         if (speechSynthesis.onvoiceschanged !== undefined) {
             speechSynthesis.onvoiceschanged = initVoices;
         }
@@ -1103,45 +1185,39 @@
         function speak(text) {
             if (synth.speaking) synth.cancel();
             if (!voiceUK || !voiceUS) initVoices();
-            
-            let spokenText = text
-                .replace(/\.org/gi, ' dot org')
-                .replace(/\.com/gi, ' dot com')
-                .replace(/\.gov/gi, ' dot g o v') 
-                .replace(/\.hk/gi, ' dot h k')
-                .replace(/www\./gi, 'www dot ');
 
-            spokenText = spokenText
+            let spokenText = text
+                .replace(/\.org/gi, " dot org ")
+                .replace(/\.com/gi, " dot com ")
+                .replace(/\.gov/gi, " dot g o v ")
+                .replace(/\.hk/gi, " dot h k ")
+                .replace(/www\./gi, " www dot ")
                 .replace(/420/g, "four hundred and twenty")
                 .replace(/550/g, "five hundred and fifty")
+                .replace(/145/g, "one hundred and forty five")
                 .replace(/50/g, "fifty")
                 .replace(/20/g, "twenty")
-                .replace(/\b7\b/g, "seven")
-                .replace(/\b12\b/g, "twelve")
-                .replace(/\b18\b/g, "eighteen")
-                .replace(/\b30\b/g, "thirty")
-                .replace(/\b16\b/g, "sixteen")
-                .replace(/\b24\b/g, "twenty four")
-                .replace(/\b25\b/g, "twenty five");
-            
-            const utterThis = new SpeechSynthesisUtterance(spokenText);
-            
-            const selectedAccent = document.getElementById('accent-select').value;
-            
-            utterThis.lang = selectedAccent === 'UK' ? 'en-GB' : 'en-US';
-            
-            utterThis.voice = selectedAccent === 'UK' ? voiceUK : voiceUS;
-            utterThis.rate = parseFloat(document.getElementById('speed-select').value);
-            utterThis.pitch = 1.05; 
-            utterThis.volume = 1.0;
-            
-            if (synth.state === 'suspended') {
-                synth.resume();
-            }
+                .replace(/7/g, "seven")
+                .replace(/12/g, "twelve")
+                .replace(/18/g, "eighteen")
+                .replace(/30/g, "thirty")
+                .replace(/16/g, "sixteen")
+                .replace(/24/g, "twenty four")
+                .replace(/25/g, "twenty five")
+                .replace(/45/g, "forty five");
 
-            setTimeout(() => {
-                synth.speak(utterThis);
-            }, 50);
+            const utterThis = new SpeechSynthesisUtterance(spokenText);
+            const isUK = document.getElementById('accent-select').value === 'UK';
+            utterThis.lang = isUK ? 'en-GB' : 'en-US';
+            if (isUK && voiceUK) { utterThis.voice = voiceUK; }
+            else if (!isUK && voiceUS) { utterThis.voice = voiceUS; }
+
+            utterThis.rate = parseFloat(document.getElementById('speed-select').value);
+            utterThis.pitch = 1.05;
+            utterThis.volume = 1.0;
+
+            if (synth.state === 'suspended') synth.resume();
+            setTimeout(() => synth.speak(utterThis), 50);
         }
 
         function countSyllables(word) {
@@ -1415,6 +1491,11 @@ function processNode(node) {
                 }
             }
         }
+    
+        window.onload = function() { 
+            setTimeout(initVoices, 100); 
+            document.body.addEventListener('touchstart', function() { if (synth.state === 'suspended') synth.resume(); }, { once: true }); 
+        };
     </script>
 </body>
 </html>
