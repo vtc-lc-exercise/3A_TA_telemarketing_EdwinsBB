@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VE3A Telemarketing Practice</title>
-    <!-- Import Google Fonts: Quicksand (Century Gothic style), Fredoka, and Nunito -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS Variables */
         :root {
             --primary: #4f46e5;
             --primary-hover: #4338ca;
@@ -20,8 +18,6 @@
             --glass-border: rgba(255, 255, 255, 0.3);
             --text-dark: #1f2937;
             --card-bg: #ffffff;
-            
-            /* Font Definitions */
             --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
             --font-title: 'Quicksand', 'Century Gothic', sans-serif;
             --font-paper-title: 'Fredoka', cursive;
@@ -76,7 +72,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- Landing Page --- */
         @media (max-width: 480px) {
             .main-title { 
                 font-size: 1.6rem !important; 
@@ -148,7 +143,6 @@
             .main-title { font-size: 1.8rem; gap: 8px; }
         }
 
-        /* --- Menu Page --- */
         .menu-layout { display: flex; gap: 20px; margin-top: 15px; }
         .menu-column { flex: 1; }
         @media (max-width: 767px) { .menu-layout { flex-direction: column; } }
@@ -172,7 +166,6 @@
         .option-text h3 { margin: 0 0 3px 0; color: var(--primary); font-size: 1.1rem; font-family: var(--font-title); font-weight: 700; }
         .option-text p { margin: 0; color: #6b7280; font-size: 0.9rem; font-weight: 600; }
 
-        /* --- Paper Layout --- */
         .paper-layout { margin-top: 15px; position: relative; }
         
         .box { background: var(--card-bg); border: 2px solid #e5e7eb; border-radius: 10px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); font-size: 0.95rem; }
@@ -196,14 +189,12 @@
 
         .box-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 10px; border-bottom: 2px solid #f3f4f6; padding-bottom: 5px; display: flex; align-items: center; gap: 5px; color: var(--text-dark); }
 
-        /* --- Modals --- */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; opacity: 0; transition: opacity 0.3s; align-items: flex-end; }
         .modal.show { display: flex; opacity: 1; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 25px 20px; box-sizing: border-box; transform: translateY(100%); transition: transform 0.3s ease-out; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); border-top: 5px solid var(--accent); }
         .modal.show .modal-content { transform: translateY(0); }
         .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; font-weight: bold; color: #9ca3af; cursor: pointer; background: none; border: none; padding: 5px; }
 
-        /* --- Common UI --- */
         .settings-panel {
             background: white; border-radius: 10px; padding: 12px; margin-bottom: 15px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 10px;
@@ -247,7 +238,6 @@
         }
         .clickable-word.show-tooltip .syllable-tooltip { opacity: 1; visibility: visible; }
 
-        /* --- Recoder UI --- */
         .recorder-container {
             background: #fef2f2; border-radius: 12px; padding: 15px; margin: 20px 0;
             box-shadow: 0 4px 6px -1px rgba(239,68,68,0.1); border: 2px dashed #fca5a5;
@@ -310,7 +300,6 @@
         <p>Interactive Practices</p>
     </header>
 
-    <!-- PAGE 1: LANDING -->
     <div id="page-landing" class="page active">
         <div class="glass-panel">
             <h3>Vocational English 3A</h3>
@@ -329,16 +318,12 @@
         </div>
     </div>
 
-    <!-- INTERNAL CONTAINER -->
     <div class="container">
-
-        <!-- PAGE 1.5: MENU -->
         <div id="page-menu" class="page">
             <h2 style="font-size: 1.4rem; margin-top: 0; font-weight: 700; font-family: var(--font-title);">Select a Practice</h2>
             <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 15px; font-weight: 600;">Choose a paper below to begin.</p>
             
             <div class="menu-layout">
-                <!-- 左邊：Official Papers -->
                 <div class="menu-column">
                     <h3 style="color: var(--primary); font-family: var(--font-title); text-align: center; margin-bottom: 15px; font-size: 1.2rem;">Official Papers</h3>
                     <div class="option-list" style="margin-top: 0;">
@@ -360,18 +345,15 @@
                         </div>
                     </div>
                 </div>
-                <!-- 右邊：Supplementary Practices -->
                 <div class="menu-column">
                     <h3 style="color: var(--accent); font-family: var(--font-title); text-align: center; margin-bottom: 15px; font-size: 1.2rem;">Supplementary</h3>
                     
-                    <!-- 未解鎖畫面 -->
                     <div id="supp-locked" class="locked-card" onclick="openPasswordModal()">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">🔒</div>
                         <h3 style="margin: 0; color: var(--text-dark); font-family: var(--font-title);">Locked Content</h3>
                         <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 0.9rem; font-weight: 600;">Click to enter password</p>
                     </div>
 
-                    <!-- 解鎖後顯示的列表 -->
                     <div id="supp-unlocked" class="option-list" style="display: none; margin-top: 0;">
                         <div class="option-card" onclick="loadPractice('suppA')">
                             <div class="option-icon" style="background: #fef3c7; color: var(--accent);">A</div>
@@ -389,7 +371,6 @@
             </div>
         </div>
 
-        <!-- PAGE 2: PRACTICE PAPER -->
         <div id="page-practice" class="page">
             <div class="btn-container">
                 <button class="btn btn-outline" onclick="navTo('page-menu')">⬅ Menu</button>
@@ -418,10 +399,8 @@
 
             <div class="paper-layout">
                 <div class="paper-left" id="paper-left-container">
-                    <!-- Dynamic Paper Content goes here -->
                 </div>
                 <div class="desktop-hints-container" id="desktop-hints-container">
-                    <!-- Dynamic Desktop Hints go here -->
                 </div>
             </div>
 
@@ -430,7 +409,6 @@
             </div>
         </div>
 
-        <!-- PAGE 3: POSSIBLE SAMPLE & RECORDER -->
         <div id="page-sample" class="page">
             <div class="btn-container">
                 <button class="btn btn-outline" onclick="navTo('page-practice')">⬅ Paper</button>
@@ -447,7 +425,6 @@
                 </div>
             </div>
 
-            <!-- RECORDING UI -->
             <div class="recorder-container">
                 <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record here!</div>
                 <div style="font-size: 0.85rem; color: #6b7280; text-align: center; font-weight: 600;">Look at the sample below and time yourself (Target: 1.5 - 2 mins)</div>
@@ -476,11 +453,9 @@
             <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700; font-family: var(--font-title);">Sample</h2>
             <div class="hint"><span style="margin-right: 8px;">💡</span> Tap ▶ to play the whole sentence, or tap words for syllables!</div>
             <div class="box" id="sample-container" style="display: flex; flex-direction: column; gap: 12px; padding: 12px;">
-                <!-- Dynamic Sample Content -->
             </div>
         </div>
 
-        <!-- PAGE 4: USEFUL EXPRESSIONS -->
         <div id="page-expressions" class="page">
             <div class="btn-container">
                 <button class="btn btn-outline" onclick="navTo('page-practice')">⬅ Paper</button>
@@ -492,13 +467,11 @@
             <p style="font-size: 0.9rem; color: #6b7280; font-weight: 600;">Use these templates for your speaking assessment. The <span style="color:#f59e0b;font-weight:700;">orange</span> parts can be changed!</p>
             
             <div id="expressions-container">
-                <!-- Dynamic Expressions -->
             </div>
         </div>
 
     </div>
 
-    <!-- MODALS (Mobile Only) -->
     <div id="modal-why" class="modal" onclick="closeModalOnBG(event, 'modal-why')">
         <div class="modal-content" id="modal-content-why">
             <button class="modal-close" onclick="closeModal('modal-why')">&times;</button>
@@ -519,8 +492,6 @@
         </div>
     </div>
 
-    
-    <!-- 密碼輸入 Modal -->
     <div id="modal-password" class="modal" onclick="closeModalOnBG(event, 'modal-password')">
         <div class="modal-content" id="modal-content-password">
             <button class="modal-close" onclick="closeModal('modal-password')">&times;</button>
@@ -537,7 +508,6 @@
     </div>
 
     <script>
-    /* --- Password Logic --- */
     function openPasswordModal() {
         document.getElementById("supp-password-input").value = "";
         document.getElementById("password-error").style.display = "none";
@@ -553,7 +523,6 @@
         }
     }
 
-    /* --- Navigation & Dynamic Loading --- */
         const pData = {
             p1: {
                 title: "Apple Tree Learning Centre<br>English Fun Day",
@@ -863,7 +832,6 @@
         ]
     }
 };
-
     let currentPracticeId = 'p1';
 
         function navToLanding() {
@@ -895,7 +863,6 @@
             currentPracticeId = id;
             const d = pData[id];
             
-            // 1. Details & Enrollment
             let detailsHtml = d.details.map(x => `<li>${x}</li>`).join('');
             let enrollHtml = d.enrollment.map(x => `<li>${x}</li>`).join('');
             
@@ -923,7 +890,6 @@
                 </div>
             `;
 
-            // 2. Desktop Hints
             let whyHtml = d.whyPoints.map(x => `<li style="margin-top:5px;">${x}</li>`).join('');
             let offerHtml = d.offerPoints.map(x => `<li style="margin-top:5px;">${x}</li>`).join('');
 
@@ -944,11 +910,9 @@
                 </div>
             `;
             
-            // 3. Mobile Modals
             document.getElementById('modal-content-why-list').innerHTML = whyHtml;
             document.getElementById('modal-content-offers-list').innerHTML = offerHtml;
 
-            // 4. Sample Sentences
             const sampleContainer = document.getElementById('sample-container');
             sampleContainer.innerHTML = '';
             d.sample.forEach(sentence => {
@@ -970,11 +934,9 @@
                 row.appendChild(textDiv);
                 sampleContainer.appendChild(row);
 
-                // Apply clickable words
                 textDiv.parentNode.replaceChild(processNode(textDiv), textDiv);
             });
 
-            // 5. Useful Expressions
             const expContainer = document.getElementById('expressions-container');
             expContainer.innerHTML = '';
             d.exp.forEach(exp => {
@@ -989,7 +951,6 @@
                 const content = document.createElement('div');
                 content.className = 'text-content';
                 
-                // Format pattern (highlight words between ?)
                 let formattedPattern = exp.pattern.replace(/\?(.*?)\?/g, '<span style="color:#f59e0b; font-weight:700;">$1</span>');
                 
                 content.innerHTML = `
@@ -1002,14 +963,12 @@
                 expContainer.appendChild(card);
             });
 
-            // Apply Syllables to boxes and modals
             makeClickableArea('box-main');
             makeClickableArea('box-why');
             makeClickableArea('box-offers');
             makeClickableArea('modal-content-why-list');
             makeClickableArea('modal-content-offers-list');
 
-            // Reset recorder
             if(mediaRecorder && mediaRecorder.state !== 'inactive') stopRecording();
             document.getElementById('audio-preview').style.display = 'none';
             document.getElementById('post-record-actions').style.display = 'none';
@@ -1019,7 +978,6 @@
             navTo('page-practice');
         }
 
-        /* --- Modals Logic (Mobile) --- */
         function openModal(id) {
             const modal = document.getElementById(id);
             modal.style.display = 'flex';
@@ -1037,7 +995,6 @@
             if (event.target.id === id) { closeModal(id); }
         }
 
-        /* --- Desktop Arrows Alignment --- */
         function adjustArrows() {
             if (window.innerWidth < 768) return;
             
@@ -1060,7 +1017,6 @@
 
         window.addEventListener('resize', adjustArrows);
 
-        /* --- Syllable Dict & TTS --- */
         const syllableDict = {
             "learning": "learn·ing", "centre": "cen·tre", "english": "eng·lish", "children": "chil·dren",
             "multi": "mul·ti", "purpose": "pur·pose", "activities": "ac·tiv·i·ties", "language": "lan·guage",
@@ -1112,7 +1068,10 @@
             "feb": { spoken: "February", meaning: "February" },
             "sept": { spoken: "September", meaning: "September" },
             "am": { spoken: "a m", meaning: "Morning" },
-            "pm": { spoken: "p m", meaning: "Afternoon" }
+            "pm": { spoken: "p m", meaning: "Afternoon" },
+            "gov": { spoken: "g o v", meaning: "Government" },
+            "fsd": { spoken: "f s d", meaning: "Fire Services Department" },
+            "hk": { spoken: "h k", meaning: "Hong Kong" }
         };
 
         const synth = window.speechSynthesis;
@@ -1145,15 +1104,13 @@
             if (synth.speaking) synth.cancel();
             if (!voiceUK || !voiceUS) initVoices();
             
-            // Fix URL and .gov pronunciation
             let spokenText = text
                 .replace(/\.org/gi, ' dot org')
                 .replace(/\.com/gi, ' dot com')
-                .replace(/\.gov/gi, ' dot gov') 
+                .replace(/\.gov/gi, ' dot g o v') 
                 .replace(/\.hk/gi, ' dot h k')
                 .replace(/www\./gi, 'www dot ');
 
-            // 針對 Samsung Android 數字變中文嘅終極防護：強制將部分常見數字轉做英文單字
             spokenText = spokenText
                 .replace(/420/g, "four hundred and twenty")
                 .replace(/550/g, "five hundred and fifty")
@@ -1169,29 +1126,24 @@
             
             const utterThis = new SpeechSynthesisUtterance(spokenText);
             
-            // 獲取使用者選擇嘅口音
             const selectedAccent = document.getElementById('accent-select').value;
             
-            // 針對 Android：強制鎖死語言標籤 (lang)！！！
             utterThis.lang = selectedAccent === 'UK' ? 'en-GB' : 'en-US';
             
             utterThis.voice = selectedAccent === 'UK' ? voiceUK : voiceUS;
             utterThis.rate = parseFloat(document.getElementById('speed-select').value);
-            utterThis.pitch = 1.05; // Slightly higher pitch for naturalness
+            utterThis.pitch = 1.05; 
             utterThis.volume = 1.0;
             
-            // 針對部分手機：確保每次讀之前 resume 引擎
             if (synth.state === 'suspended') {
                 synth.resume();
             }
 
-            // 加少少 delay 先讀，確保 Android 引擎準備好
             setTimeout(() => {
                 synth.speak(utterThis);
             }, 50);
         }
 
-        /* --- Syllable Auto-Generator --- */
         function countSyllables(word) {
             word = word.toLowerCase();
             if(word.length <= 3) return 1;
@@ -1233,7 +1185,6 @@ function processNode(node) {
 
                 const fragment = document.createDocumentFragment();
                 
-                // Regex matches time like "10:00" OR alphanumeric words OR other symbols
                 const tokens = text.match(/(\d{1,2}:\d{2})|([a-zA-Z0-9]+)|([^a-zA-Z0-9]+)/g);
                 if (!tokens) return node;
                 
@@ -1257,7 +1208,6 @@ function processNode(node) {
                         let customMeaning = meaningDict[lowerToken];
                         let spokenText = token;
 
-                        // 1. Time Check (e.g. "10:00")
                         if (/^\d{1,2}:\d{2}$/.test(token)) {
                             let parts = token.split(':');
                             let hour = parseInt(parts[0]);
@@ -1273,7 +1223,6 @@ function processNode(node) {
                             
                             customMeaning = { spoken: spokenText, meaning: "Time" };
                         } 
-                        // 2. Date Ordinal Check (lookahead for months)
                         else if (/^\d+$/.test(token) && parseInt(token) >= 1 && parseInt(token) <= 31) {
                             let nextWord = null;
                             for (let j = i + 1; j < tokens.length; j++) {
@@ -1366,7 +1315,6 @@ function processNode(node) {
             }
         }
 
-        /* --- Audio Recorder --- */
         let mediaRecorder;
         let audioChunks = [];
         let timerInterval;
