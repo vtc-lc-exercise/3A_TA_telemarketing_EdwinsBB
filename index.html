@@ -291,6 +291,64 @@
             font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: flex-start; font-weight: 600;
         }
         b, strong { font-weight: 700; }
+    
+        /* Flip Card Styles */
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 15px; }
+
+        .flip-card {
+            background-color: transparent; width: 100%; height: 110px; perspective: 1000px; cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 12px;
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px;
+            padding: 10px; box-sizing: border-box;
+        }
+
+        .flip-card-front { background: white; border: 2px solid #e0e7ff; color: var(--text-dark); }
+        .flip-card-back { background: linear-gradient(135deg, var(--primary), var(--bg-grad-2)); color: white; transform: rotateY(180deg); border: 2px solid transparent; }
+
+        .vocab-word { font-size: 1.25rem; font-weight: 700; font-family: var(--font-title); margin-bottom: 5px; color: var(--primary); }
+        .vocab-type { font-size: 0.85rem; color: #6b7280; font-style: italic; background: #f3f4f6; padding: 2px 8px; border-radius: 12px; }
+
+        .flip-card-back .vocab-word { color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.2); margin-bottom: 3px; font-size: 1.1rem; }
+        .vocab-chinese { font-size: 1.15rem; color: #fef3c7; font-weight: 700; font-family: var(--font-body); margin-bottom: 8px; text-shadow: 0 1px 2px rgba(0,0,0,0.3); letter-spacing: 1px; }
+
+        .play-icon-vocab { font-size: 1.8rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); animation: pulse-soft 2s infinite; }
+        @keyframes pulse-soft { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        
+
+        
+        .vocab-list-title { 
+            font-size: 1.3rem; color: white; background: var(--accent); padding: 12px 20px; 
+            border-radius: 12px; display: flex; align-items: center; justify-content: space-between; 
+            margin: 0; font-family: var(--font-title); box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            border: 2px solid #fff; cursor: pointer; transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .vocab-list-title:active { transform: scale(0.98); }
+        .vocab-list-title .toggle-icon { font-size: 1.2rem; transition: transform 0.3s ease; }
+        .vocab-list-title.open .toggle-icon { transform: rotate(180deg); }
+
+        .vocab-grid-wrapper {
+            max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out;
+        }
+        .vocab-grid-wrapper.open {
+            max-height: 2000px; /* arbitrary large number */
+        }
+        .vocab-section { background: white; border-radius: 16px; padding: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; border-left: 5px solid var(--accent); border-top: none; }
+
+
     </style>
 </head>
 <body class="landing-active" id="main-body">
@@ -323,6 +381,14 @@
             <h2 style="font-size: 1.4rem; margin-top: 0; font-weight: 700; font-family: var(--font-title);">Select a Practice</h2>
             <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 15px; font-weight: 600;">Choose a paper below to begin.</p>
             
+            <div class="option-card vocab-card-main" onclick="navTo('page-vocab'); renderVocab();" style="margin-bottom: 25px; background: linear-gradient(135deg, #4f46e5, #06b6d4); border: none; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3); transform: translateY(0); transition: all 0.3s ease; position: relative; overflow: hidden;">
+                <div style="position: absolute; right: -20px; top: -20px; font-size: 6rem; opacity: 0.1; line-height: 1;">📖</div>
+                <div class="option-icon" style="background: white; color: var(--primary); font-size: 1.8rem; width: 60px; height: 60px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">🗣️</div>
+                <div class="option-text" style="margin-left: 5px;">
+                    <h3 style="color: white; font-size: 1.4rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">Interactive Vocab</h3>
+                    <p style="color: rgba(255,255,255,0.9); font-size: 1rem; font-weight: 500;">Tap to listen & flip the flashcards!</p>
+                </div>
+            </div>
             <div class="menu-layout">
                 <div class="menu-column">
                     <h3 style="color: var(--primary); font-family: var(--font-title); text-align: center; margin-bottom: 15px; font-size: 1.2rem;">Official Papers</h3>
@@ -370,6 +436,18 @@
                         <div class="option-card" onclick="loadPractice('suppD')">
                             <div class="option-icon" style="background: #fef3c7; color: var(--accent);">D</div>
                             <div class="option-text"><h3 style="color: var(--accent);">Practice D</h3><p>Yuen Long District Office</p></div>
+                        </div>
+                        <div class="option-card" onclick="loadPractice('suppE')">
+                            <div class="option-icon" style="background: #fef3c7; color: var(--accent);">E</div>
+                            <div class="option-text"><h3 style="color: var(--accent);">Practice E</h3><p>Kwun Tong District Office</p></div>
+                        </div>
+                        <div class="option-card" onclick="loadPractice('suppF')">
+                            <div class="option-icon" style="background: #fef3c7; color: var(--accent);">F</div>
+                            <div class="option-text"><h3 style="color: var(--accent);">Practice F</h3><p>Kwai Tsing District Office</p></div>
+                        </div>
+                        <div class="option-card" onclick="loadPractice('suppG')">
+                            <div class="option-icon" style="background: #fef3c7; color: var(--accent);">G</div>
+                            <div class="option-text"><h3 style="color: var(--accent);">Practice G</h3><p>Sai Kung District Office</p></div>
                         </div>
                     </div>
                 </div>
@@ -480,6 +558,24 @@
 
     </div>
 
+    
+        <div id="page-vocab" class="page">
+            <div class="btn-container">
+                <button class="btn btn-outline" onclick="navTo('page-menu')">⬅ Menu</button>
+            </div>
+            <h2 style="font-size: 1.4rem; margin-top: 0; font-weight: 700; font-family: var(--font-title);">Vocabulary List</h2>
+            
+            <div style="background: linear-gradient(to right, #fef3c7, #fde68a); border-radius: 12px; padding: 15px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px;">
+                <div style="font-size: 2.5rem; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));">🃏</div>
+                <div>
+                    <h3 style="margin: 0 0 5px 0; color: #b45309; font-family: var(--font-title); font-size: 1.1rem;">Interactive Flashcards</h3>
+                    <p style="margin: 0; color: #92400e; font-size: 0.9rem; font-weight: 600; line-height: 1.3;">Tap any card to <b>flip it</b> and listen to the perfect British / American pronunciation! 🎧</p>
+                </div>
+            </div>
+
+            <div id="vocab-container"></div>
+        </div>
+
     <div id="modal-why" class="modal" onclick="closeModalOnBG(event, 'modal-why')">
         <div class="modal-content" id="modal-content-why">
             <button class="modal-close" onclick="closeModal('modal-why')">&times;</button>
@@ -516,7 +612,129 @@
     </div>
 
     <script>
+    
+    const vocabLists = [
+        { title: "Vocab List 1", words: [ 
+            {w:"association", p:"noun", c:"協會/公會"}, {w:"centre", p:"noun", c:"中心"}, {w:"charity", p:"noun", c:"慈善機構"}, 
+            {w:"company", p:"noun", c:"公司"}, {w:"competition", p:"noun", c:"比賽"}, {w:"headquarters", p:"noun", c:"總部"}, 
+            {w:"participant", p:"noun", c:"參加者"}, {w:"public", p:"noun", c:"公眾"}, {w:"staff", p:"noun", c:"職員"}, 
+            {w:"studio", p:"noun", c:"工作室/錄音室"} 
+        ] },
+        { title: "Vocab List 2", words: [ 
+            {w:"booth", p:"noun", c:"攤位"}, {w:"campaign", p:"noun", c:"活動/運動"}, {w:"culture", p:"noun", c:"文化"}, 
+            {w:"demonstration", p:"noun", c:"示範"}, {w:"environment", p:"noun", c:"環境"}, {w:"health", p:"noun", c:"健康"}, 
+            {w:"sports", p:"noun", c:"運動"}, {w:"tasting", p:"noun", c:"品嚐"}, {w:"trial", p:"noun", c:"試用/試驗"}, 
+            {w:"workshop", p:"noun", c:"工作坊"} 
+        ] },
+        { title: "Vocab List 3", words: [ 
+            {w:"attractive", p:"adjective", c:"吸引的"}, {w:"awareness", p:"noun", c:"意識"}, {w:"broaden", p:"verb", c:"擴闊"}, 
+            {w:"creative", p:"adjective", c:"有創意的"}, {w:"develop", p:"verb", c:"發展/培養"}, {w:"effective", p:"adjective", c:"有效的"}, 
+            {w:"efficient", p:"adjective", c:"有效率的"}, {w:"enhance", p:"verb", c:"提升/加強"}, {w:"experience", p:"noun", c:"經驗"}, 
+            {w:"explore", p:"verb", c:"探索"}, {w:"healthy", p:"adjective", c:"健康的"}, {w:"helpful", p:"adjective", c:"有幫助的"}, 
+            {w:"horizon", p:"noun", c:"眼界/視野"}, {w:"informative", p:"adjective", c:"資訊豐富的"}, {w:"interactive", p:"adjective", c:"互動的"}, 
+            {w:"interesting", p:"adjective", c:"有趣的"}, {w:"motivate", p:"verb", c:"激勵/推動"}, {w:"motivation", p:"noun", c:"動力/動機"}, 
+            {w:"practical", p:"adjective", c:"實用的"}, {w:"popular", p:"adjective", c:"受歡迎的"}, {w:"potential", p:"noun", c:"潛力/潛能"}, 
+            {w:"raise", p:"verb", c:"提高/籌集"}, {w:"release", p:"verb", c:"釋放/發佈"}, {w:"relaxing", p:"adjective", c:"令人放鬆的"}, 
+            {w:"satisfaction", p:"noun", c:"滿意/滿足感"}, {w:"satisfy", p:"verb", c:"滿足"}, {w:"skill", p:"noun", c:"技巧/技能"}, 
+            {w:"strengthen", p:"verb", c:"鞏固/加強"}, {w:"stress", p:"noun", c:"壓力"}, {w:"useful", p:"adjective", c:"有用的"} 
+        ] },
+        { title: "Vocab List 4", words: [ 
+            {w:"apply", p:"verb", c:"申請"}, {w:"application", p:"noun", c:"申請"}, {w:"enrol", p:"verb", c:"報名/註冊"}, 
+            {w:"enrolment", p:"noun", c:"報名/註冊人數"}, {w:"per", p:"preposition", c:"每一"}, {w:"register", p:"verb", c:"登記"}, 
+            {w:"registration", p:"noun", c:"登記/註冊"}, {w:"reserve", p:"verb", c:"預訂/保留"}, {w:"reservation", p:"noun", c:"預訂"} 
+        ] },
+        { title: "Vocab List 5", words: [ 
+            {w:"community", p:"noun", c:"社區"}, {w:"complimentary", p:"adjective", c:"免費贈送的"}, {w:"coupon", p:"noun", c:"優惠券"}, 
+            {w:"equipment", p:"noun", c:"設備/器材"}, {w:"fund", p:"noun", c:"基金/資金"}, {w:"souvenir", p:"noun", c:"紀念品"}, 
+            {w:"sponsored", p:"verb", c:"贊助"}, {w:"supported", p:"verb", c:"支持"}, {w:"voucher", p:"noun", c:"代金券"}, 
+            {w:"welfare", p:"noun", c:"福利"} 
+        ] }
+    ];
+
+    function renderVocab() {
+        let html = "";
+        vocabLists.forEach((list, index) => {
+            let color = index % 2 === 0 ? "var(--primary)" : "var(--accent)";
+            let shadowColor = index % 2 === 0 ? "rgba(79, 70, 229, 0.3)" : "rgba(245, 158, 11, 0.3)";
+
+            // First list open by default, others closed
+            let isOpen = index === 0 ? "open" : "";
+
+            html += `
+            <div class="vocab-section" style="border-left-color: ${color};">
+                <div class="vocab-list-title ${isOpen}" style="background: ${color};" onclick="toggleVocabList(${index})">
+                    <span>📚 ${list.title} <span style="font-size: 0.9rem; font-weight: normal; opacity: 0.9;">(${list.words.length} words)</span></span>
+                    <span class="toggle-icon" id="toggle-icon-${index}">▼</span>
+                </div>
+                <div class="vocab-grid-wrapper ${isOpen}" id="vocab-wrapper-${index}">
+                    <div class="vocab-grid" style="padding-top: 15px; padding-bottom: 5px;">`;
+
+            list.words.forEach((item, wIndex) => {
+                let uniqueId = `vocab-${index}-${wIndex}`;
+                html += `
+                <div class="flip-card" id="${uniqueId}" onclick="flipAndSpeak('${uniqueId}', '${item.w}')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="vocab-word">${item.w}</div>
+                            <div class="vocab-type">${item.p}</div>
+                            <div style="position:absolute; bottom:5px; right:8px; font-size:0.7rem; color:#d1d5db;">Tap 👆</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="vocab-word">${item.w}</div>
+                            <div class="vocab-chinese">${item.c}</div>
+                            <div class="play-icon-vocab" style="font-size: 1.4rem;">🔊</div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            html += `       </div>
+                        </div>
+                      </div>`;
+        });
+        document.getElementById('vocab-container').innerHTML = html;
+    }
+
+    
+    function toggleVocabList(index) {
+        let wrapper = document.getElementById(`vocab-wrapper-${index}`);
+        let title = wrapper.previousElementSibling;
+
+        if (wrapper.classList.contains('open')) {
+            wrapper.classList.remove('open');
+            title.classList.remove('open');
+        } else {
+            wrapper.classList.add('open');
+            title.classList.add('open');
+        }
+    }
+
+    function flipAndSpeak(cardId, text) {
+        // 1. Flip all other cards back
+        document.querySelectorAll('.flip-card').forEach(card => {
+            if (card.id !== cardId) {
+                card.classList.remove('flipped');
+            }
+        });
+
+        // 2. Flip the clicked card
+        let card = document.getElementById(cardId);
+        card.classList.add('flipped');
+
+        // 3. Speak the word (with a slight delay so they see the flip)
+        setTimeout(() => {
+            speak(text);
+        }, 150);
+
+        // 4. Auto-flip back after 2 seconds
+        setTimeout(() => {
+            if (card.classList.contains('flipped')) {
+                card.classList.remove('flipped');
+            }
+        }, 3000);
+    }
+
     function openPasswordModal() {
+
         document.getElementById("supp-password-input").value = "";
         document.getElementById("password-error").style.display = "none";
         openModal("modal-password");
@@ -908,6 +1126,110 @@
                 {pattern: "Designed for ?target group?, this relaxing evening will be held on ?date? from ?time? to ?time? at ?venue?.", example: "Designed for working adults aged 25 to 45, this relaxing evening will be held on the 12th of May, from 6:30 pm to 9:30 pm at Yuen Long Farm."},
                 {pattern: "You can look forward to a great event featuring ?activity 1?, ?activity 2?, and ?activity 3?.", example: "You can look forward to a great event featuring organic farming, a workshop, and game booths."},
                 {pattern: "Please complete your enrolment at ?website? before ?deadline?.", example: "Please complete your enrolment at www.yld.gov.hk before the 19th of April 2026."}
+            ]
+        },
+        suppE: {
+            title: "Kwun Tong District Office<br>Fire Prevention Campaign",
+            enrollTitle: "Enrolment Method & Fee",
+            details: [
+                "For new immigrants",
+                "<b>Date / Time / Venue:</b><br>30 June / 10:30am - 4:30pm / Regional Community Centre",
+                "<b>Activities:</b> Helpful safety campaign, extinguisher trial, uniform showcase"
+            ],
+            enrollment: ["In person: local centres", "$200/person", "Deadline: 20 May 2026"],
+            sponsor: "Hong Kong Charity Fund",
+            enquiry: "2 3 4 5 6 7 8 9",
+            whyPoints: [
+                "Motivate participants to understand local safety culture and raise emergency awareness - participants", 
+                "<b>Benefit 2 and elaboration?</b>"
+            ],
+            offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
+            sample: [
+                "Hello there! Welcome to the Kwun Tong District Office hotline.",
+                "Looking for something meaningful and fun to do? Come and join our upcoming Fire Prevention Campaign!",
+                "Welcoming all new immigrants, this wonderful event is scheduled for the 30th of June, running from 10:30 am to 4:30 pm at Regional Community Centre.",
+                "Prepare yourself for an amazing time with activities such as helpful safety campaign, extinguisher trial, and uniform showcase.",
+                "You really shouldn't miss out on this!",
+                "By joining us, you can easily be motivated to understand local safety culture and raise emergency awareness.",
+                "On top of that, you will gain confidence handling fire emergencies and protect your family effectively.",
+                "Ready to join? Simply apply in person at local centres on or before the 20th of May 2026.",
+                "The entry fee is only 200 dollars per person.",
+                "As a special treat sponsored by the Hong Kong Charity Fund, all attendees will receive a fire safety toolkit and a bilingual emergency contact card to take home.",
+                "For further enquiries, please contact us at 2 3 4 5 6 7 8 9.",
+                "Thanks for calling, and we hope to see you there. Bye!"
+            ],
+            exp: [
+                {pattern: "Welcoming all ?target group?, this wonderful event is scheduled for ?date?, running from ?time? to ?time? at ?venue?.", example: "Welcoming all new immigrants, this wonderful event is scheduled for the 30th of June, running from 10:30 am to 4:30 pm at Regional Community Centre."},
+                {pattern: "Prepare yourself for an amazing time with activities such as ?activity 1?, ?activity 2?, and ?activity 3?.", example: "Prepare yourself for an amazing time with activities such as helpful safety campaign, extinguisher trial, and uniform showcase."},
+                {pattern: "Simply apply in person at ?location? on or before ?deadline?.", example: "Simply apply in person at local centres on or before the 20th of May 2026."}
+            ]
+        },
+        suppF: {
+            title: "Kwai Tsing District Office<br>No Drugs Day!",
+            enrollTitle: "Enrolment Method & Fee",
+            details: [
+                "For teenagers (aged 13-17)",
+                "<b>Date / Time / Venue:</b><br>14 July / 1:00pm - 6:00pm / Outdoor sports ground",
+                "<b>Activities:</b> physical fitness competition, game booth, sharing workshop"
+            ],
+            enrollment: ["Online registration: www.ktd.gov.hk", "Free of charge", "Deadline: 7 Jul 2026"],
+            sponsor: "Youth Care Fund",
+            enquiry: "2 8 4 8 9 5 1 4",
+            whyPoints: [
+                "Gain high motivation to build a healthy lifestyle - participants", 
+                "<b>Benefit 2 and elaboration?</b>"
+            ],
+            offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
+            sample: [
+                "Good morning. Thank you for contacting the Kwai Tsing District Office hotline.",
+                "We are delighted to announce our latest programme: No Drugs Day.",
+                "This event targets teenagers aged 13 to 17 and will be held on the 14th of July from 10:00 am to 6:00 pm at the Outdoor Sportsground.",
+                "The programme features physical fitness workshop, game booth, and sharing session to engage all participants.",
+                "We highly recommend attendance as it enables everyone to gain high motivation to build healthy lifestyle.",
+                "In addition, you will develop resilience against temptation and strengthen decision-making abilities effectively.",
+                "Registration is available online at www.ktd.gov.hk until the 7th of July 2026.",
+                "Admission is free of charge, with complimentary resistance band set and healthy habit tracker provided by the Youth Care Fund.",
+                "For further information, please telephone 2 8 4 9 5 5 1 4.",
+                "Thank you for calling. Goodbye."
+            ],
+            exp: [
+                {pattern: "This event targets ?target group? and will be held on ?date? from ?time? to ?time? at ?venue?.", example: "This event targets teenagers aged 13 to 17 and will be held on the 14th of July from 10:00 am to 6:00 pm at the Outdoor Sportsground."},
+                {pattern: "The programme features ?activity 1?, ?activity 2?, and ?activity 3? to engage all participants.", example: "The programme features physical fitness workshop, game booth, and sharing session to engage all participants."},
+                {pattern: "Registration is available online at ?website? until ?deadline?.", example: "Registration is available online at www.ktd.gov.hk until the 7th of July 2026."}
+            ]
+        },
+        suppG: {
+            title: "Sai Kung District Office<br>Fire Safety Contest",
+            enrollTitle: "Enrolment Method & Fee",
+            details: [
+                "For schools (Sai Kung District)",
+                "<b>Date / Time / Venue:</b><br>8 Aug / 9:00am - 12:30pm / Training Headquarters",
+                "<b>Activities:</b> slogan writing, colouring poster design"
+            ],
+            enrollment: ["Online: www.skd.gov.hk", "Free of charge", "Deadline: 16 Jul 2026"],
+            sponsor: "Sai Kung District Fire Safety Committee",
+            enquiry: "3 7 4 0 5 3 7 3",
+            whyPoints: [
+                "Promote public awareness of fire safety through contests - participants", 
+                "<b>Benefit 2 and elaboration?</b>"
+            ],
+            offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
+            sample: [
+                "Hey everyone! You've reached the Sai Kung District Office hotline.",
+                "Want to get creative and make our community safer? Join our super cool Fire Safety Contest!",
+                "Perfect for school students in Sai Kung District, this event kicks off on the 8th of August from 9:00 am to 12:30 pm at the Training Centre.",
+                "Get ready for slogan competition, colouring competition, and poster design - the ultimate creativity showcase!",
+                "This is your chance to promote public awareness of fire safety!",
+                "Plus, you'll boost your design skills and shine in front of judges and peers.",
+                "Super easy to join - just register online at www.skd.gov.hk before 16th July 2026!",
+                "Completely free of charge thanks to the Sai Kung Sponsored Fire Safety Committee.",
+                "Everyone gets a limited edition art pencil set and a 'Future Fire Safety Star' certificate!",
+                "Questions? Hit us up at 3 7 4 0 5 7 3 7. Catch you at the contest!"
+            ],
+            exp: [
+                {pattern: "Perfect for ?target group?, this event kicks off on ?date? from ?time? to ?time? at ?venue?.", example: "Perfect for school students in Sai Kung District, this event kicks off on the 8th of August from 9:00 am to 12:30 pm at the Training Centre."},
+                {pattern: "Get ready for ?activity 1?, ?activity 2?, and ?activity 3? - the ultimate creativity showcase!", example: "Get ready for slogan competition, colouring competition, and poster design - the ultimate creativity showcase!"},
+                {pattern: "Super easy to join - just register online at ?website? before ?deadline?!", example: "Super easy to join - just register online at www.skd.gov.hk before 16th July 2026!"}
             ]
         }
     };
