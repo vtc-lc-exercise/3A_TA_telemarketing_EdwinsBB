@@ -293,10 +293,10 @@
         b, strong { font-weight: 700; }
     
         /* Flip Card Styles */
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 15px; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 15px; }
 
         .flip-card {
-            background-color: transparent; width: 100%; height: 110px; perspective: 1000px; cursor: pointer;
+            background-color: transparent; width: 100%; height: 140px; perspective: 1000px; cursor: pointer;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -320,8 +320,10 @@
         .vocab-word { font-size: 1.25rem; font-weight: 700; font-family: var(--font-title); margin-bottom: 5px; color: var(--primary); }
         .vocab-type { font-size: 0.85rem; color: #6b7280; font-style: italic; background: #f3f4f6; padding: 2px 8px; border-radius: 12px; }
 
-        .flip-card-back .vocab-word { color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.2); margin-bottom: 3px; font-size: 1.1rem; }
-        .vocab-chinese { font-size: 1.15rem; color: #fef3c7; font-weight: 700; font-family: var(--font-body); margin-bottom: 8px; text-shadow: 0 1px 2px rgba(0,0,0,0.3); letter-spacing: 1px; }
+        .flip-card-back .vocab-word { color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.2); margin-bottom: 8px; font-size: 1.1rem; word-wrap: break-word; line-height: 1.2; width: 100%; padding: 0 5px; box-sizing: border-box; }
+        .vocab-chinese { font-size: 1.2rem; color: #fef3c7; font-weight: 700; font-family: var(--font-body); margin-bottom: 8px; text-shadow: 0 1px 2px rgba(0,0,0,0.3); letter-spacing: 1px; line-height: 1.2; }
+        .play-icon-vocab { margin-top: auto; }
+        
 
         .play-icon-vocab { font-size: 1.8rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); animation: pulse-soft 2s infinite; }
         @keyframes pulse-soft { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
@@ -452,7 +454,27 @@
                     </div>
                 </div>
             </div>
-            <div style="margin-top: 25px; text-align: center;">
+            
+                    <!-- MOCK EXAM SECTION -->
+                    <div style="margin-top: 35px; margin-bottom: 10px; border-top: 2px dashed #fca5a5; padding-top: 25px;">
+                        <h3 style="color: #ef4444; font-family: var(--font-title); text-align: center; margin-bottom: 15px; font-size: 1.3rem;">🚨 Mock Assessment</h3>
+
+                        <div id="mock-locked" class="locked-card" onclick="openMockPasswordModal()" style="border-color: #fca5a5; background: #fef2f2; max-width: 400px; margin: 0 auto; box-shadow: 0 4px 6px rgba(239,68,68,0.1);">
+                            <div style="font-size: 2.5rem; margin-bottom: 10px; animation: pulse 2s infinite;">🔒</div>
+                            <h3 style="margin: 0; color: #b91c1c; font-family: var(--font-title);">Mock Exam</h3>
+                            <p style="margin: 5px 0 0 0; color: #ef4444; font-size: 0.95rem; font-weight: 700;">Click to enter password</p>
+                        </div>
+
+                        <div id="mock-unlocked" class="option-list" style="display: none; margin-top: 0; max-width: 400px; margin: 0 auto;">
+                            <div class="option-card" onclick="loadPractice('mock1')" style="border-color: #ef4444; background: #fef2f2; box-shadow: 0 4px 6px rgba(239,68,68,0.1);">
+                                <div class="option-icon" style="background: #ef4444; color: white;">M</div>
+                                <div class="option-text"><h3 style="color: #ef4444;">Mock Exam</h3><p style="font-weight:700;">Sha Tin Town Hall</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END MOCK EXAM SECTION -->
+
+                    <div style="margin-top: 25px; text-align: center;">
                 <button class="btn btn-outline" style="width: auto; padding: 10px 20px; display: inline-flex;" onclick="navToLanding()">⬅ Back to Cover</button>
             </div>
         </div>
@@ -473,7 +495,7 @@
                 </div>
                 <div class="setting-group" style="margin-left: 10px;">
                     <label>Speed:</label>
-                    <select id="speed-select">
+                    <select id="speed-select" onchange="if(document.getElementById('speed-select-vocab')) document.getElementById('speed-select-vocab').value = this.value;">
                         <option value="0.75">Slow</option>
                         <option value="0.9" selected>Normal</option>
                         <option value="1.1">Fast</option>
@@ -563,7 +585,25 @@
             <div class="btn-container">
                 <button class="btn btn-outline" onclick="navTo('page-menu')">⬅ Menu</button>
             </div>
-            <h2 style="font-size: 1.4rem; margin-top: 0; font-weight: 700; font-family: var(--font-title);">Vocabulary List</h2>
+            <h2 style="font-size: 1.4rem; margin-top: 0; margin-bottom: 15px; font-weight: 700; font-family: var(--font-title);">Vocabulary List</h2>
+
+            <div class="settings-panel" style="margin-bottom: 20px;">
+                <div class="setting-group">
+                    <label>Accent:</label>
+                    <select id="accent-select-vocab" onchange="syncAccents(this.value)">
+                        <option value="UK">British (UK)</option>
+                        <option value="US">American (US)</option>
+                    </select>
+                </div>
+                <div class="setting-group" style="margin-left: 10px;">
+                    <label>Speed:</label>
+                    <select id="speed-select-vocab" onchange="document.getElementById('speed-select').value = this.value; document.getElementById('speed-select').dispatchEvent(new Event('change'));">
+                        <option value="0.75">Slow</option>
+                        <option value="0.9" selected>Normal</option>
+                        <option value="1.1">Fast</option>
+                    </select>
+                </div>
+            </div>
             
             <div style="background: linear-gradient(to right, #fef3c7, #fde68a); border-radius: 12px; padding: 15px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px;">
                 <div style="font-size: 2.5rem; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));">🃏</div>
@@ -611,43 +651,60 @@
         </div>
     </div>
 
+    
+    <!-- MOCK MODAL -->
+    <div id="modal-mock-password" class="modal" onclick="closeModalOnBG(event, 'modal-mock-password')">
+        <div class="modal-content" id="modal-content-mock-password" style="border-top: 5px solid #ef4444;">
+            <button class="modal-close" onclick="closeModal('modal-mock-password')">&times;</button>
+            <div class="box-title" style="font-size: 1.2rem; border-color: #ef4444; color: #ef4444;">
+                Enter Mock Password
+            </div>
+            <div style="margin-top: 20px; text-align: center; padding-bottom: 10px;">
+                <input type="password" id="mock-password-input" style="padding: 12px; width: 80%; max-width: 250px; border: 2px solid #fca5a5; border-radius: 8px; font-size: 1.2rem; text-align: center; font-family: var(--font-body); outline: none;" placeholder="Password" />
+                <br>
+                <button class="btn" style="margin-top: 15px; background-color: #ef4444; width: 80%; max-width: 250px; color: white; border: none; box-shadow: 0 4px 6px rgba(239,68,68,0.3);" onclick="verifyMockPassword()">Unlock Exam</button>
+                <p id="mock-password-error" style="color: #ef4444; font-size: 0.95rem; display: none; margin-top: 12px; font-weight: 700;">Incorrect password. Please try again.</p>
+            </div>
+        </div>
+    </div>
+
     <script>
     
     const vocabLists = [
         { title: "Vocab List 1", words: [ 
-            {w:"association", p:"noun", c:"協會/公會"}, {w:"centre", p:"noun", c:"中心"}, {w:"charity", p:"noun", c:"慈善機構"}, 
-            {w:"company", p:"noun", c:"公司"}, {w:"competition", p:"noun", c:"比賽"}, {w:"headquarters", p:"noun", c:"總部"}, 
-            {w:"participant", p:"noun", c:"參加者"}, {w:"public", p:"noun", c:"公眾"}, {w:"staff", p:"noun", c:"職員"}, 
-            {w:"studio", p:"noun", c:"工作室/錄音室"} 
+            {w:"association", p:"noun", c:"協會/公會", s:"as·so·ci·a·tion"}, {w:"centre", p:"noun", c:"中心", s:"cen·tre"}, {w:"charity", p:"noun", c:"慈善機構", s:"char·i·ty"}, 
+            {w:"company", p:"noun", c:"公司", s:"com·pa·ny"}, {w:"competition", p:"noun", c:"比賽", s:"com·pe·ti·tion"}, {w:"headquarters", p:"noun", c:"總部", s:"head·quar·ters"}, 
+            {w:"participant", p:"noun", c:"參加者", s:"par·tic·i·pant"}, {w:"public", p:"noun", c:"公眾", s:"pub·lic"}, {w:"staff", p:"noun", c:"職員", s:"staff"}, 
+            {w:"studio", p:"noun", c:"工作室/錄音室", s:"stu·di·o"} 
         ] },
         { title: "Vocab List 2", words: [ 
-            {w:"booth", p:"noun", c:"攤位"}, {w:"campaign", p:"noun", c:"活動/運動"}, {w:"culture", p:"noun", c:"文化"}, 
-            {w:"demonstration", p:"noun", c:"示範"}, {w:"environment", p:"noun", c:"環境"}, {w:"health", p:"noun", c:"健康"}, 
-            {w:"sports", p:"noun", c:"運動"}, {w:"tasting", p:"noun", c:"品嚐"}, {w:"trial", p:"noun", c:"試用/試驗"}, 
-            {w:"workshop", p:"noun", c:"工作坊"} 
+            {w:"booth", p:"noun", c:"攤位", s:"booth"}, {w:"campaign", p:"noun", c:"活動/運動", s:"cam·paign"}, {w:"culture", p:"noun", c:"文化", s:"cul·ture"}, 
+            {w:"demonstration", p:"noun", c:"示範", s:"dem·on·stra·tion"}, {w:"environment", p:"noun", c:"環境", s:"en·vi·ron·ment"}, {w:"health", p:"noun", c:"健康", s:"health"}, 
+            {w:"sports", p:"noun", c:"運動", s:"sports"}, {w:"tasting", p:"noun", c:"品嚐", s:"tas·ting"}, {w:"trial", p:"noun", c:"試用/試驗", s:"tri·al"}, 
+            {w:"workshop", p:"noun", c:"工作坊", s:"work·shop"} 
         ] },
         { title: "Vocab List 3", words: [ 
-            {w:"attractive", p:"adjective", c:"吸引的"}, {w:"awareness", p:"noun", c:"意識"}, {w:"broaden", p:"verb", c:"擴闊"}, 
-            {w:"creative", p:"adjective", c:"有創意的"}, {w:"develop", p:"verb", c:"發展/培養"}, {w:"effective", p:"adjective", c:"有效的"}, 
-            {w:"efficient", p:"adjective", c:"有效率的"}, {w:"enhance", p:"verb", c:"提升/加強"}, {w:"experience", p:"noun", c:"經驗"}, 
-            {w:"explore", p:"verb", c:"探索"}, {w:"healthy", p:"adjective", c:"健康的"}, {w:"helpful", p:"adjective", c:"有幫助的"}, 
-            {w:"horizon", p:"noun", c:"眼界/視野"}, {w:"informative", p:"adjective", c:"資訊豐富的"}, {w:"interactive", p:"adjective", c:"互動的"}, 
-            {w:"interesting", p:"adjective", c:"有趣的"}, {w:"motivate", p:"verb", c:"激勵/推動"}, {w:"motivation", p:"noun", c:"動力/動機"}, 
-            {w:"practical", p:"adjective", c:"實用的"}, {w:"popular", p:"adjective", c:"受歡迎的"}, {w:"potential", p:"noun", c:"潛力/潛能"}, 
-            {w:"raise", p:"verb", c:"提高/籌集"}, {w:"release", p:"verb", c:"釋放/發佈"}, {w:"relaxing", p:"adjective", c:"令人放鬆的"}, 
-            {w:"satisfaction", p:"noun", c:"滿意/滿足感"}, {w:"satisfy", p:"verb", c:"滿足"}, {w:"skill", p:"noun", c:"技巧/技能"}, 
-            {w:"strengthen", p:"verb", c:"鞏固/加強"}, {w:"stress", p:"noun", c:"壓力"}, {w:"useful", p:"adjective", c:"有用的"} 
+            {w:"attractive", p:"adjective", c:"吸引的", s:"at·trac·tive"}, {w:"awareness", p:"noun", c:"意識", s:"a·ware·ness"}, {w:"broaden", p:"verb", c:"擴闊", s:"broad·en"}, 
+            {w:"creative", p:"adjective", c:"有創意的", s:"cre·a·tive"}, {w:"develop", p:"verb", c:"發展/培養", s:"de·vel·op"}, {w:"effective", p:"adjective", c:"有效的", s:"ef·fec·tive"}, 
+            {w:"efficient", p:"adjective", c:"有效率的", s:"ef·fi·cient"}, {w:"enhance", p:"verb", c:"提升/加強", s:"en·hance"}, {w:"experience", p:"noun", c:"經驗", s:"ex·pe·ri·ence"}, 
+            {w:"explore", p:"verb", c:"探索", s:"ex·plore"}, {w:"healthy", p:"adjective", c:"健康的", s:"health·y"}, {w:"helpful", p:"adjective", c:"有幫助的", s:"help·ful"}, 
+            {w:"horizon", p:"noun", c:"眼界/視野", s:"ho·ri·zon"}, {w:"informative", p:"adjective", c:"資訊豐富的", s:"in·form·a·tive"}, {w:"interactive", p:"adjective", c:"互動的", s:"in·ter·ac·tive"}, 
+            {w:"interesting", p:"adjective", c:"有趣的", s:"in·ter·est·ing"}, {w:"motivate", p:"verb", c:"激勵/推動", s:"mo·ti·vate"}, {w:"motivation", p:"noun", c:"動力/動機", s:"mo·ti·va·tion"}, 
+            {w:"practical", p:"adjective", c:"實用的", s:"prac·ti·cal"}, {w:"popular", p:"adjective", c:"受歡迎的", s:"pop·u·lar"}, {w:"potential", p:"noun", c:"潛力/潛能", s:"po·ten·tial"}, 
+            {w:"raise", p:"verb", c:"提高/籌集", s:"raise"}, {w:"release", p:"verb", c:"釋放/發佈", s:"re·lease"}, {w:"relaxing", p:"adjective", c:"令人放鬆的", s:"re·lax·ing"}, 
+            {w:"satisfaction", p:"noun", c:"滿意/滿足感", s:"sat·is·fac·tion"}, {w:"satisfy", p:"verb", c:"滿足", s:"sat·is·fy"}, {w:"skill", p:"noun", c:"技巧/技能", s:"skill"}, 
+            {w:"strengthen", p:"verb", c:"鞏固/加強", s:"strength·en"}, {w:"stress", p:"noun", c:"壓力", s:"stress"}, {w:"useful", p:"adjective", c:"有用的", s:"use·ful"} 
         ] },
         { title: "Vocab List 4", words: [ 
-            {w:"apply", p:"verb", c:"申請"}, {w:"application", p:"noun", c:"申請"}, {w:"enrol", p:"verb", c:"報名/註冊"}, 
-            {w:"enrolment", p:"noun", c:"報名/註冊人數"}, {w:"per", p:"preposition", c:"每一"}, {w:"register", p:"verb", c:"登記"}, 
-            {w:"registration", p:"noun", c:"登記/註冊"}, {w:"reserve", p:"verb", c:"預訂/保留"}, {w:"reservation", p:"noun", c:"預訂"} 
+            {w:"apply", p:"verb", c:"申請", s:"ap·ply"}, {w:"application", p:"noun", c:"申請", s:"ap·pli·ca·tion"}, {w:"enrol", p:"verb", c:"報名/註冊", s:"en·rol"}, 
+            {w:"enrolment", p:"noun", c:"報名/註冊人數", s:"en·rol·ment"}, {w:"per", p:"preposition", c:"每一", s:"per"}, {w:"register", p:"verb", c:"登記", s:"reg·is·ter"}, 
+            {w:"registration", p:"noun", c:"登記/註冊", s:"reg·is·tra·tion"}, {w:"reserve", p:"verb", c:"預訂/保留", s:"re·serve"}, {w:"reservation", p:"noun", c:"預訂", s:"res·er·va·tion"} 
         ] },
         { title: "Vocab List 5", words: [ 
-            {w:"community", p:"noun", c:"社區"}, {w:"complimentary", p:"adjective", c:"免費贈送的"}, {w:"coupon", p:"noun", c:"優惠券"}, 
-            {w:"equipment", p:"noun", c:"設備/器材"}, {w:"fund", p:"noun", c:"基金/資金"}, {w:"souvenir", p:"noun", c:"紀念品"}, 
-            {w:"sponsored", p:"verb", c:"贊助"}, {w:"supported", p:"verb", c:"支持"}, {w:"voucher", p:"noun", c:"代金券"}, 
-            {w:"welfare", p:"noun", c:"福利"} 
+            {w:"community", p:"noun", c:"社區", s:"com·mu·ni·ty"}, {w:"complimentary", p:"adjective", c:"免費贈送的", s:"com·pli·men·ta·ry"}, {w:"coupon", p:"noun", c:"優惠券", s:"cou·pon"}, 
+            {w:"equipment", p:"noun", c:"設備/器材", s:"e·quip·ment"}, {w:"fund", p:"noun", c:"基金/資金", s:"fund"}, {w:"souvenir", p:"noun", c:"紀念品", s:"sou·ve·nir"}, 
+            {w:"sponsored", p:"verb", c:"贊助", s:"spon·sored"}, {w:"supported", p:"verb", c:"支持", s:"sup·port·ed"}, {w:"voucher", p:"noun", c:"代金券", s:"vouch·er"}, 
+            {w:"welfare", p:"noun", c:"福利", s:"wel·fare"} 
         ] }
     ];
 
@@ -680,9 +737,9 @@
                             <div style="position:absolute; bottom:5px; right:8px; font-size:0.7rem; color:#d1d5db;">Tap 👆</div>
                         </div>
                         <div class="flip-card-back">
-                            <div class="vocab-word">${item.w}</div>
+                            <div class="vocab-word">${item.s}</div>
                             <div class="vocab-chinese">${item.c}</div>
-                            <div class="play-icon-vocab" style="font-size: 1.4rem;">🔊</div>
+                            <div class="play-icon-vocab" style="font-size: 1.6rem; margin-top: 5px;">🔊</div>
                         </div>
                     </div>
                 </div>`;
@@ -731,6 +788,23 @@
                 card.classList.remove('flipped');
             }
         }, 3000);
+    }
+
+    
+    function openMockPasswordModal() {
+        document.getElementById('mock-password-input').value = '';
+        document.getElementById('mock-password-error').style.display = 'none';
+        openModal('modal-mock-password');
+    }
+
+    function verifyMockPassword() {
+        if (document.getElementById('mock-password-input').value === '3aTA') {
+            closeModal('modal-mock-password');
+            document.getElementById('mock-locked').style.display = 'none';
+            document.getElementById('mock-unlocked').style.display = 'block';
+        } else {
+            document.getElementById('mock-password-error').style.display = 'block';
+        }
     }
 
     function openPasswordModal() {
@@ -1231,7 +1305,28 @@
                 {pattern: "Get ready for ?activity 1?, ?activity 2?, and ?activity 3? - the ultimate creativity showcase!", example: "Get ready for slogan competition, colouring competition, and poster design - the ultimate creativity showcase!"},
                 {pattern: "Super easy to join - just register online at ?website? before ?deadline?!", example: "Super easy to join - just register online at www.skd.gov.hk before 16th July 2026!"}
             ]
+        },
+        mock1: {
+            title: "Sha Tin Town Hall<br>Community Health Day",
+            enrollTitle: "Enrolment Method & Fee",
+            details: [
+                "For young adults (aged between 18 & 25)",
+                "<b>Date / Time / Venue:</b><br>16 Jun / 9:30am - 5:00pm / Centre Square",
+                "<b>Activities:</b> group exercises, health talks & organic food tasting"
+            ],
+            enrollment: ["Online enrolment: www.shatintw.org.hk", "$10/person", "Deadline: 30 May 20xx"],
+            sponsor: "World Health Fund",
+            enquiry: "2 6 5 7 1 3 2 4",
+            whyPoints: [
+                "Fun fitness activities &rarr; participants", 
+                "<b>Benefit 2 and elaboration?</b>"
+            ],
+            offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
+            sample: [],
+            exp: [],
+            isMock: true
         }
+
     };
 let currentPracticeId = 'p1';
 
@@ -1250,6 +1345,28 @@ let currentPracticeId = 'p1';
         }
 
         function navTo(pageId) {
+        // If navigating to sample page in Mock mode, change title and hide text
+        if (pageId === 'page-sample') {
+            const data = pData[currentPracticeId];
+            let sampleTitle = document.getElementById('sample-page-title');
+            if (!sampleTitle) sampleTitle = document.querySelector('#page-sample h2');
+            let sampleContainer = document.getElementById('sample-container');
+            let hintBlock = document.querySelector('#page-sample .hint');
+
+            if (data && data.isMock) {
+                if (sampleTitle) sampleTitle.style.display = 'none';
+                if (sampleContainer) sampleContainer.style.display = 'none';
+                if (hintBlock) hintBlock.style.display = 'none';
+            } else {
+                if (sampleTitle) {
+                    sampleTitle.style.display = 'block';
+                    sampleTitle.innerHTML = 'Sample';
+                }
+                if (sampleContainer) sampleContainer.style.display = 'flex';
+                if (hintBlock) hintBlock.style.display = 'flex';
+            }
+        }
+
             document.getElementById('main-body').classList.remove('landing-active');
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
@@ -1263,6 +1380,42 @@ let currentPracticeId = 'p1';
         function loadPractice(id) {
             currentPracticeId = id;
             const d = pData[id];
+    // Check if it's Mock mode
+    if (d.isMock) {
+        // Change Sample button to Record button
+        document.querySelectorAll('button[onclick="navTo(\'page-sample\')"]').forEach(btn => {
+            btn.innerHTML = '🔴 Record Now!';
+            btn.style.backgroundColor = '#ef4444';
+            btn.style.color = 'white';
+            btn.style.border = 'none';
+        });
+        // Hide Expressions button entirely
+        document.querySelectorAll('button[onclick="navTo(\'page-expressions\')"]').forEach(btn => {
+            btn.style.display = 'none';
+        });
+    } else {
+        // Reset normal mode
+        let sampleBtn1 = document.querySelector('#page-practice button[onclick="navTo(\'page-sample\')"]');
+        if (sampleBtn1) {
+            sampleBtn1.innerHTML = 'Sample ➡';
+            sampleBtn1.style.backgroundColor = '';
+            sampleBtn1.style.color = '';
+            sampleBtn1.style.border = '';
+            sampleBtn1.className = 'btn';
+        }
+        let sampleBtn2 = document.querySelector('#page-expressions button[onclick="navTo(\'page-sample\')"]');
+        if (sampleBtn2) {
+            sampleBtn2.innerHTML = 'Sample';
+            sampleBtn2.style.backgroundColor = '';
+            sampleBtn2.style.color = '';
+            sampleBtn2.style.border = '';
+            sampleBtn2.className = 'btn btn-outline';
+        }
+        document.querySelectorAll('button[onclick="navTo(\'page-expressions\')"]').forEach(btn => {
+            btn.style.display = 'inline-flex';
+        });
+    }
+
             
             let detailsHtml = d.details.map(x => `<li>${x}</li>`).join('');
             let enrollHtml = d.enrollment.map(x => `<li>${x}</li>`).join('');
