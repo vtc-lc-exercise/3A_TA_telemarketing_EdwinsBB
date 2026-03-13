@@ -1682,6 +1682,7 @@ let currentPracticeId = 'p1';
                 .replace(/24/g, "twenty four")
                 .replace(/25/g, "twenty five")
                 .replace(/45/g, "forty five");
+                .replace(/\btasting\b/gi, 'taysting');
 
             const utterThis = new SpeechSynthesisUtterance(spokenText);
             const isUK = document.getElementById('accent-select').value === 'UK';
